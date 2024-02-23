@@ -19,6 +19,13 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.squirrel</groupId>
+            <artifactId>squirrel-shop-web</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
