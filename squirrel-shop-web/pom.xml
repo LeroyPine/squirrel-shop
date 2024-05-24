@@ -20,19 +20,10 @@
     <dependencies>
         <dependency>
             <groupId>org.squirrel</groupId>
-            <artifactId>squirrel-shop-dao</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.squirrel</groupId>
-            <artifactId>squirrel-shop-model</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.squirrel</groupId>
             <artifactId>squirrel-shop-service</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
+
 
 </project>

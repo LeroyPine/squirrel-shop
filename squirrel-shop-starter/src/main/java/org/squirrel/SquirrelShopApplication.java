@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -13,20 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @SpringBootApplication
-public class Main {
+public class SquirrelShopApplication {
     static Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-        SpringApplication.run(Main.class, args);
+        SpringApplication.run(SquirrelShopApplication.class, args);
         logger.info("Squirrel started!");
     }
 
 
-    @GetMapping("/hello")
-    public String hello() {
-        logger.info("hello info!");
-        logger.warn("hello warn!");
-        logger.error("hello error!");
-        return "hello squirrel";
-    }
 }
