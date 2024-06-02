@@ -36,12 +36,12 @@
         <!-- 根据时间来制定滚动策略 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${USER_DIR}/logs/${DIR_NAME}/error.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <maxHistory>30</maxHistory>
+            <maxHistory>15</maxHistory>
         </rollingPolicy>
 
         <!-- 根据文件大小来制定滚动策略 -->
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <maxFileSize>10MB</maxFileSize>
+            <maxFileSize>50</maxFileSize>
         </triggeringPolicy>
 
         <filter class="ch.qos.logback.classic.filter.LevelFilter">

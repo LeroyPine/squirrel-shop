@@ -1,0 +1,12 @@
+logging:
+  config: classpath:logback-spring-dev.xml
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/squirrel_shop
+    username: root
+    password: 12345678
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

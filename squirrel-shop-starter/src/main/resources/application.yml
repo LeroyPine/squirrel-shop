@@ -1,6 +1,6 @@
-server:
-  port: 8089
 spring:
+  profiles:
+    active: dev
   banner:
     charset: UTF-8
     location: classpath:squirrel-banner.txt

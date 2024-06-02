@@ -39,11 +39,31 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <mybatis.plus.version>3.4.3.4</mybatis.plus.version>
+        <lomok.version>1.18.24</lomok.version>
+        <slf4j.version>1.7.36</slf4j.version>
     </properties>
 
     <!--依赖管理 -->
     <dependencyManagement>
-
+        <dependencies>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis.plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lomok.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version> <!-- 使用最新的稳定版本 -->
+            </dependency>
+        </dependencies>
     </dependencyManagement>
 
 

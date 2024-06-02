@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @SpringBootApplication
 public class SquirrelShopApplication {
-    static Logger logger = LoggerFactory.getLogger(Main.class);
+    static Logger logger = LoggerFactory.getLogger(SquirrelShopApplication.class);
 
     public static void main(String[] args) {
         SpringApplication.run(SquirrelShopApplication.class, args);
