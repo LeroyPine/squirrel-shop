@@ -42,6 +42,8 @@
         <mybatis.plus.version>3.4.3.4</mybatis.plus.version>
         <lomok.version>1.18.24</lomok.version>
         <slf4j.version>1.7.36</slf4j.version>
+        <java-jwt.version>4.2.1</java-jwt.version>
+        <springdoc.version>1.6.15</springdoc.version>
     </properties>
 
     <!--依赖管理 -->
@@ -63,6 +65,18 @@
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version> <!-- 使用最新的稳定版本 -->
             </dependency>
+            <dependency>
+                <groupId>com.auth0</groupId>
+                <artifactId>java-jwt</artifactId>
+                <version>${java-jwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-ui</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+
+
         </dependencies>
     </dependencyManagement>
 

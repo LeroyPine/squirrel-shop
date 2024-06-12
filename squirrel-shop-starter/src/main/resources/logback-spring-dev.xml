@@ -111,7 +111,7 @@
 
     <!-- logger begin -->
     <!-- 本项目的日志记录，分级打印 -->
-    <logger name="org.squirrel" level="INFO" additivity="false">
+    <logger name="org.squirrel" level="DEBUG" additivity="false">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="ERROR"/>
         <appender-ref ref="WARN"/>
@@ -124,7 +124,7 @@
         <appender-ref ref="SPRING"/>
     </logger>
 
-    <root level="INFO">
+    <root level="info">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="INFO"/>
     </root>
