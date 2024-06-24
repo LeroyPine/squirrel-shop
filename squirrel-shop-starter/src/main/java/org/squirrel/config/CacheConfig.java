@@ -1,20 +1,32 @@
 package org.squirrel.config;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author luobaosong
  * @date 2024-06-10 22:49
  */
-@Slf4j
-@Component
+@Configuration
+@EnableCaching
 public class CacheConfig {
 
-    public static Map<Object, Object> cacheMap = new HashMap<>();
+
+    /**
+     * 用户缓存
+     */
+    @Bean
+    public Cache<String, Object> cacheTemplate() {
+        return Caffeine.newBuilder()
+                .expireAfterAccess(5, TimeUnit.HOURS)
+                .maximumSize(500)
+                .build();
+    }
+
 
 }

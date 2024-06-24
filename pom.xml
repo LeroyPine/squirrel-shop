@@ -44,6 +44,7 @@
         <slf4j.version>1.7.36</slf4j.version>
         <java-jwt.version>4.2.1</java-jwt.version>
         <springdoc.version>1.6.15</springdoc.version>
+        <guava.version>29.0-jre</guava.version>
     </properties>
 
     <!--依赖管理 -->
@@ -75,8 +76,11 @@
                 <artifactId>springdoc-openapi-ui</artifactId>
                 <version>${springdoc.version}</version>
             </dependency>
-
-
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

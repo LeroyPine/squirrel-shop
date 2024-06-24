@@ -73,16 +73,6 @@ create table prize_points_config
 )
     comment '奖品积分配置表';
 
-create table role_info
-(
-    role_id     int auto_increment,
-    role_name   varchar(64) not null,
-    role_status int         not null comment '角色状态 0 禁用 1 启用',
-    create_date datetime    null,
-    update_date datetime    null on update CURRENT_TIMESTAMP,
-    primary key (role_id, role_status)
-)
-    comment '角色信息表';
 
 create table user_info
 (
@@ -98,14 +88,28 @@ create table user_info
 )
     comment '用户信息表';
 
-create table user_role
+CREATE TABLE `role_info`
 (
-    id          int auto_increment
-        primary key,
-    user_id     varchar(64) not null comment '用户id',
-    role_id     int         not null comment '角色id',
-    create_date datetime    not null,
-    update_date datetime    not null on update CURRENT_TIMESTAMP
-)
-    comment '用户角色表';
+    `id`          int                             NOT NULL AUTO_INCREMENT,
+    `role_id`     varchar(16) COLLATE utf8mb3_bin DEFAULT NULL,
+    `role_name`   varchar(64) COLLATE utf8mb3_bin NOT NULL,
+    `role_status` int                             NOT NULL COMMENT '角色状态 0 禁用 1 启用',
+    `create_date` datetime                        DEFAULT NULL,
+    `update_date` datetime                        DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`, `role_status`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb3
+  COLLATE = utf8mb3_bin COMMENT ='角色信息表'
 
+
+CREATE TABLE `user_role`
+(
+    `id`          int                             NOT NULL AUTO_INCREMENT,
+    `user_id`     varchar(64) COLLATE utf8mb3_bin NOT NULL COMMENT '用户id',
+    `role_id`     varchar(16) COLLATE utf8mb3_bin NOT NULL COMMENT '角色id',
+    `create_date` datetime                        NOT NULL,
+    `update_date` datetime                        NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb3
+  COLLATE = utf8mb3_bin COMMENT ='用户角色表'

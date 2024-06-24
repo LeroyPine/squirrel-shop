@@ -1,4 +1,4 @@
-package org.squirrel.util;
+package util;
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
@@ -12,12 +12,12 @@ import org.springframework.web.client.RestTemplate;
  */
 @Slf4j
 @Component
-public class OkHttpUtil {
+public class OkHttpUtils {
 
     private final RestTemplate restTemplate;
 
     @Autowired
-    public OkHttpUtil(RestTemplate restTemplate) {
+    public OkHttpUtils(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 

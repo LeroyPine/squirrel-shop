@@ -18,10 +18,13 @@ public class AdminUserInfo {
     private Long id;
 
     @TableField(value = "user_id")
-    private String userId;
+    private Integer userId;
 
     @TableField(value = "user_name")
     private String userName;
+
+    @TableField(value = "nick_name")
+    private String nickName;
 
     @TableField(value = "user_pwd")
     private String userPwd;
