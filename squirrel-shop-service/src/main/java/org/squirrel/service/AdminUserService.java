@@ -2,14 +2,13 @@ package org.squirrel.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.ImmutableMap;
-import exception.UserNameNotFoundException;
+import org.squirrel.exception.UserNameNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.squirrel.mapper.AdminUserMapper;
 import org.squirrel.po.AdminUserInfo;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +38,12 @@ public class AdminUserService {
         queryWrapper.eq("user_name", username);
         AdminUserInfo adminUserInfo = adminUserMapper.selectOne(queryWrapper);
         return Optional.ofNullable(adminUserInfo).orElseThrow(() -> new UserNameNotFoundException(ImmutableMap.of("username", username)));
+    }
+
+    public AdminUserInfo findById(Integer userId) {
+        QueryWrapper<AdminUserInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId);
+        return adminUserMapper.selectOne(queryWrapper);
     }
 
 }

@@ -1,6 +1,6 @@
-package exception;
+package org.squirrel.exception;
 
-import constant.ErrorCode;
+import org.squirrel.constant.ErrorCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.util.ObjectUtils;

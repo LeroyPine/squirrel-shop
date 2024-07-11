@@ -21,9 +21,9 @@ public class CacheConfig {
      * 用户缓存
      */
     @Bean
-    public Cache<String, Object> cacheTemplate() {
+    public Cache<Object, Object> cacheTemplate() {
         return Caffeine.newBuilder()
-                .expireAfterAccess(5, TimeUnit.HOURS)
+                .expireAfterAccess(48, TimeUnit.HOURS)
                 .maximumSize(500)
                 .build();
     }

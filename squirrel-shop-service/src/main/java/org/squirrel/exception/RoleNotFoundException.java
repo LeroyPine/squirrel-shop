@@ -1,6 +1,6 @@
-package exception;
+package org.squirrel.exception;
 
-import constant.ErrorCode;
+import org.squirrel.constant.ErrorCode;
 
 import java.util.Map;
 
@@ -9,6 +9,6 @@ import java.util.Map;
  */
 public class RoleNotFoundException extends BaseException {
     public RoleNotFoundException(Map<String, Object> data) {
-        super(ErrorCode.Role_NOT_FOUND, data);
+        super(ErrorCode.ROLE_NOT_FOUND, data);
     }
 }

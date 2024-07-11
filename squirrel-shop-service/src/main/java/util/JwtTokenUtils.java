@@ -5,7 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import constant.SecurityConstants;
+import org.squirrel.constant.SecurityConstants;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -41,7 +41,7 @@ public class JwtTokenUtils {
     /**
      * 访问token有效期
      */
-    public static final long ACCESS_TOKEN_EXPIRATION = 600_000;
+    public static final long ACCESS_TOKEN_EXPIRATION = 60_000;
     /**
      * 刷新token有效期
      */
@@ -58,10 +58,10 @@ public class JwtTokenUtils {
                 .sign(Algorithm.HMAC512(SECRET_KEY.getEncoded()));
     }
 
-    public static String generateRefreshToken(String userName, String userId, List<String> roles) {
-        return SecurityConstants.TOKEN_PREFIX + JWT.create()
+    public static String generateRefreshToken(String userName, Integer userId, List<String> roles) {
+        return JWT.create()
                 .withSubject(userName)
-                .withJWTId(userId)
+                .withJWTId(String.valueOf(userId))
                 .withClaim(SecurityConstants.ROLE_CLAIMS, roles)
                 .withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION))
                 .withIssuedAt(new Date())

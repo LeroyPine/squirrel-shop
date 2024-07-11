@@ -1,4 +1,4 @@
-package constant;
+package org.squirrel.constant;
 
 /**
  * @author luobaosong
@@ -6,8 +6,10 @@ package constant;
  */
 public class SecurityConstants {
 
-
-    public static final String JWT_SECRET_KEY = "G7vM4L9hDxJ2kQ5aHjW8NzQ2xL1yK9Pg";
+    /**
+     * 刷新token key
+     */
+    public static final String REFRESH_TOKEN = "refresh-token";
 
     /**
      * JWT角色的key
@@ -22,7 +24,7 @@ public class SecurityConstants {
     // Swagger WHITELIST
     public static final String[] SWAGGER_WHITELIST = {
             "/swagger-ui.html",
-            "/swagger-ui/*",
+            "/swagger-ui/**",
             "/v3/api-docs/**",
     };
 
@@ -32,9 +34,11 @@ public class SecurityConstants {
 
     public static final String[] SYSTEM_WHITELIST = {
             "/auth/login",
-            "/users/sign-up"
+            "/auth/refreshToken"
     };
 
 
-
+    public static String getRefreshTokenKey(Integer userId) {
+        return REFRESH_TOKEN + "_" + userId;
+    }
 }

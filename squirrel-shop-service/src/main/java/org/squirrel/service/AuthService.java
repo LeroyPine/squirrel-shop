@@ -1,17 +1,21 @@
 package org.squirrel.service;
 
-import constant.ErrorCode;
-import exception.PasswordNotCorrectException;
+import com.github.benmanes.caffeine.cache.Cache;
+import org.apache.commons.lang3.StringUtils;
+import org.squirrel.constant.ErrorCode;
+import org.squirrel.constant.SecurityConstants;
+import org.squirrel.exception.PasswordNotCorrectException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.squirrel.dto.LoginRequest;
 import org.squirrel.dto.UserInfoDto;
+import org.squirrel.exception.TokenInvalidException;
 import org.squirrel.po.AdminUserInfo;
 import util.JwtTokenUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author luobaosong
@@ -24,6 +28,7 @@ public class AuthService {
 
     private final AdminUserService adminUserService;
     private final UserRoleService userRoleService;
+    private final Cache<Object, Object> cacheTemplate;
 
 
     public UserInfoDto createToken(LoginRequest loginRequest) {
@@ -34,14 +39,35 @@ public class AuthService {
         List<String> roles = userRoleService.findRolesByUserId(userInfo.getUserId());
         // 创建token,并返回
         String token = JwtTokenUtils.generateToken(userInfo.getUserName(), userInfo.getUserId(), roles);
-        log.info("userId:{},token:{}", userInfo.getUserId(), token);
+        String refreshToken = JwtTokenUtils.generateRefreshToken(userInfo.getUserName(), userInfo.getUserId(), roles);
+        log.info("userId:{},token:{},refreshToken:{}", userInfo.getUserId(), token, refreshToken);
+        cacheTemplate.put(userInfo.getUserId(), token);
+        cacheTemplate.put(SecurityConstants.getRefreshTokenKey(userInfo.getUserId()), refreshToken);
         return UserInfoDto.builder()
                 .userId(userInfo.getUserId())
                 .userName(userInfo.getUserName())
                 .roles(roles)
                 .token(token)
+                .refreshToken(refreshToken)
                 .build();
-
     }
 
+    public String refreshToken(String refreshToken) {
+        if (StringUtils.isBlank(refreshToken)) {
+            throw new TokenInvalidException(ErrorCode.VERIFY_JWT_FAILED, null);
+        }
+        String userIdStr = JwtTokenUtils.getId(refreshToken);
+        Integer userId = Integer.parseInt(userIdStr);
+        String refreshTokenKey = SecurityConstants.getRefreshTokenKey(userId);
+        String refreshTokenFromCache = (String) cacheTemplate.getIfPresent(refreshTokenKey);
+        if (!refreshToken.equals(refreshTokenFromCache)) {
+            throw new TokenInvalidException(ErrorCode.VERIFY_JWT_FAILED, null);
+        }
+        // 重新生成token
+        AdminUserInfo userInfo = adminUserService.findById(userId);
+        List<String> roles = userRoleService.findRolesByUserId(userId);
+        String token = JwtTokenUtils.generateToken(userInfo.getUserName(), userInfo.getUserId(), roles);
+        cacheTemplate.put(userInfo.getUserId(), token);
+        return token;
+    }
 }

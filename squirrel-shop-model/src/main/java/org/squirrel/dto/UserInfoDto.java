@@ -21,4 +21,6 @@ public class UserInfoDto {
     private List<String> roles;
     @JsonIgnore
     private String token;
+    @JsonIgnore
+    private String refreshToken;
 }
