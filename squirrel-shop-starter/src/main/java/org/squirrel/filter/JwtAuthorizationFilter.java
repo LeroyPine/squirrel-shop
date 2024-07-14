@@ -34,6 +34,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
 
     @Override
+
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain) throws IOException, ServletException {
@@ -47,7 +48,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         UsernamePasswordAuthenticationToken authentication = null;
         try {
             String previousToken = (String) cache.getIfPresent(JwtTokenUtils.getId(tokenValue));
-            if (!token.equals(previousToken)) {
+            if (!tokenValue.equals(previousToken)) {
                 SecurityContextHolder.clearContext();
                 chain.doFilter(request, response);
                 return;

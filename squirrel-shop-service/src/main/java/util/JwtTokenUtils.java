@@ -49,7 +49,7 @@ public class JwtTokenUtils {
 
 
     public static String generateToken(String userName, Integer userId, List<String> roles) {
-        return SecurityConstants.TOKEN_PREFIX + JWT.create()
+        return JWT.create()
                 .withSubject(userName)
                 .withJWTId(String.valueOf(userId))
                 .withClaim(SecurityConstants.ROLE_CLAIMS, roles)
@@ -77,6 +77,11 @@ public class JwtTokenUtils {
 
     public static String getId(String token) {
         DecodedJWT jwt = getJwt(token, SECRET_KEY);
+        return jwt.getId();
+    }
+
+    public static String getRefreshId(String token) {
+        DecodedJWT jwt = getJwt(token, REFRESH_SECRET_KEY);
         return jwt.getId();
     }
 

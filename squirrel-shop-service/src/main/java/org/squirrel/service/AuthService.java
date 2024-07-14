@@ -28,7 +28,7 @@ public class AuthService {
 
     private final AdminUserService adminUserService;
     private final UserRoleService userRoleService;
-    private final Cache<Object, Object> cacheTemplate;
+    private final Cache<String, Object> cacheTemplate;
 
 
     public UserInfoDto createToken(LoginRequest loginRequest) {
@@ -41,13 +41,13 @@ public class AuthService {
         String token = JwtTokenUtils.generateToken(userInfo.getUserName(), userInfo.getUserId(), roles);
         String refreshToken = JwtTokenUtils.generateRefreshToken(userInfo.getUserName(), userInfo.getUserId(), roles);
         log.info("userId:{},token:{},refreshToken:{}", userInfo.getUserId(), token, refreshToken);
-        cacheTemplate.put(userInfo.getUserId(), token);
+        cacheTemplate.put(String.valueOf(userInfo.getUserId()), token);
         cacheTemplate.put(SecurityConstants.getRefreshTokenKey(userInfo.getUserId()), refreshToken);
         return UserInfoDto.builder()
                 .userId(userInfo.getUserId())
                 .userName(userInfo.getUserName())
                 .roles(roles)
-                .token(token)
+                .token(SecurityConstants.TOKEN_PREFIX + token)
                 .refreshToken(refreshToken)
                 .build();
     }
@@ -67,7 +67,7 @@ public class AuthService {
         AdminUserInfo userInfo = adminUserService.findById(userId);
         List<String> roles = userRoleService.findRolesByUserId(userId);
         String token = JwtTokenUtils.generateToken(userInfo.getUserName(), userInfo.getUserId(), roles);
-        cacheTemplate.put(userInfo.getUserId(), token);
+        cacheTemplate.put(String.valueOf(userInfo.getUserId()), token);
         return token;
     }
 }

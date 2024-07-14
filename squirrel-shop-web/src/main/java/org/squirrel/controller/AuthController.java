@@ -43,16 +43,17 @@ public class AuthController {
     @Operation(summary = "刷新token", description = "刷新token")
     @PostMapping("/refreshToken")
     public ResponseEntity<Void> refreshToken(@RequestHeader(value = SecurityConstants.REFRESH_TOKEN) String refreshToken) {
-
         String token = authService.refreshToken(refreshToken);
-
-        return null;
+        // 将token添加到响应头
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.AUTHORIZATION, token);
+        return new ResponseEntity<>(null, headers, HttpStatus.OK);
     }
 
 
     @Operation(summary = "testJwt", description = "testJwt")
     @PostMapping("/testJwt")
-    public String testJwt() {
+    public String testJwt(@RequestHeader(value = SecurityConstants.TOKEN_HEADER) String token) {
         log.info("testJwt");
         return "jwt";
     }
