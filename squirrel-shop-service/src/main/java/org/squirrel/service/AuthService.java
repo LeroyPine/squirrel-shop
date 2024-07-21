@@ -56,7 +56,7 @@ public class AuthService {
         if (StringUtils.isBlank(refreshToken)) {
             throw new TokenInvalidException(ErrorCode.VERIFY_JWT_FAILED, null);
         }
-        String userIdStr = JwtTokenUtils.getId(refreshToken);
+        String userIdStr = JwtTokenUtils.getRefreshId(refreshToken);
         Integer userId = Integer.parseInt(userIdStr);
         String refreshTokenKey = SecurityConstants.getRefreshTokenKey(userId);
         String refreshTokenFromCache = (String) cacheTemplate.getIfPresent(refreshTokenKey);
@@ -68,6 +68,6 @@ public class AuthService {
         List<String> roles = userRoleService.findRolesByUserId(userId);
         String token = JwtTokenUtils.generateToken(userInfo.getUserName(), userInfo.getUserId(), roles);
         cacheTemplate.put(String.valueOf(userInfo.getUserId()), token);
-        return token;
+        return SecurityConstants.TOKEN_PREFIX + token;
     }
 }

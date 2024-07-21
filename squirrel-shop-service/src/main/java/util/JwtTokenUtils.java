@@ -41,7 +41,7 @@ public class JwtTokenUtils {
     /**
      * 访问token有效期
      */
-    public static final long ACCESS_TOKEN_EXPIRATION = 60_000;
+    public static final long ACCESS_TOKEN_EXPIRATION = 360_000;
     /**
      * 刷新token有效期
      */

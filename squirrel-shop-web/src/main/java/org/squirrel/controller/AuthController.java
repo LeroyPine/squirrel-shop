@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,6 @@ import org.squirrel.constant.SecurityConstants;
 import org.squirrel.dto.LoginRequest;
 import org.squirrel.dto.UserInfoDto;
 import org.squirrel.service.AuthService;
-import org.squirrel.vo.ApiResponse;
 
 /**
  * @author luobaosong
@@ -35,7 +33,7 @@ public class AuthController {
         UserInfoDto userInfoDto = authService.createToken(loginRequest);
         // 将token添加到响应头
         HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.AUTHORIZATION, userInfoDto.getToken());
+        headers.set(SecurityConstants.TOKEN_HEADER, userInfoDto.getToken());
         headers.set(SecurityConstants.REFRESH_TOKEN, userInfoDto.getRefreshToken());
         return new ResponseEntity<>(userInfoDto, headers, HttpStatus.OK);
     }
@@ -46,14 +44,14 @@ public class AuthController {
         String token = authService.refreshToken(refreshToken);
         // 将token添加到响应头
         HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.AUTHORIZATION, token);
+        headers.set(SecurityConstants.TOKEN_HEADER, token);
         return new ResponseEntity<>(null, headers, HttpStatus.OK);
     }
 
 
     @Operation(summary = "testJwt", description = "testJwt")
     @PostMapping("/testJwt")
-    public String testJwt(@RequestHeader(value = SecurityConstants.TOKEN_HEADER) String token) {
+    public String testJwt(@RequestHeader(value = SecurityConstants.TOKEN_HEADER) String Authorization) {
         log.info("testJwt");
         return "jwt";
     }
