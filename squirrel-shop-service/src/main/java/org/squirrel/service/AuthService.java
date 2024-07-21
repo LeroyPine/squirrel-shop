@@ -1,21 +1,20 @@
 package org.squirrel.service;
 
 import com.github.benmanes.caffeine.cache.Cache;
-import org.apache.commons.lang3.StringUtils;
-import org.squirrel.constant.ErrorCode;
-import org.squirrel.constant.SecurityConstants;
-import org.squirrel.exception.PasswordNotCorrectException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.squirrel.constant.ErrorCode;
+import org.squirrel.constant.SecurityConstants;
 import org.squirrel.dto.LoginRequest;
 import org.squirrel.dto.UserInfoDto;
+import org.squirrel.exception.BizException;
 import org.squirrel.exception.TokenInvalidException;
 import org.squirrel.po.AdminUserInfo;
 import util.JwtTokenUtils;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author luobaosong
@@ -34,7 +33,7 @@ public class AuthService {
     public UserInfoDto createToken(LoginRequest loginRequest) {
         AdminUserInfo userInfo = adminUserService.findByName(loginRequest.getUsername());
         if (!userInfo.getUserPwd().equals(loginRequest.getPassword())) {
-            throw new PasswordNotCorrectException(ErrorCode.PASSWORD_NOT_VALID, null);
+            throw new BizException(ErrorCode.PASSWORD_NOT_VALID);
         }
         List<String> roles = userRoleService.findRolesByUserId(userInfo.getUserId());
         // 创建token,并返回
@@ -54,14 +53,14 @@ public class AuthService {
 
     public String refreshToken(String refreshToken) {
         if (StringUtils.isBlank(refreshToken)) {
-            throw new TokenInvalidException(ErrorCode.VERIFY_JWT_FAILED, null);
+            throw new TokenInvalidException(ErrorCode.VERIFY_JWT_FAILED);
         }
         String userIdStr = JwtTokenUtils.getRefreshId(refreshToken);
         Integer userId = Integer.parseInt(userIdStr);
         String refreshTokenKey = SecurityConstants.getRefreshTokenKey(userId);
         String refreshTokenFromCache = (String) cacheTemplate.getIfPresent(refreshTokenKey);
         if (!refreshToken.equals(refreshTokenFromCache)) {
-            throw new TokenInvalidException(ErrorCode.VERIFY_JWT_FAILED, null);
+            throw new TokenInvalidException(ErrorCode.VERIFY_JWT_FAILED  );
         }
         // 重新生成token
         AdminUserInfo userInfo = adminUserService.findById(userId);

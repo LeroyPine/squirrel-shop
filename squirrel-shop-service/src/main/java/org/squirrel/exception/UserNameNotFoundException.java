@@ -8,9 +8,9 @@ import java.util.Map;
  * @author luobaosong
  * @date 2024-06-22 14:52
  */
-public class UserNameNotFoundException extends BaseException {
+public class UserNameNotFoundException extends BizException {
 
-    public UserNameNotFoundException(Map<String, Object> data) {
-        super(ErrorCode.USER_NAME_NOT_FOUND, data);
+    public UserNameNotFoundException() {
+        super(ErrorCode.USER_NAME_NOT_FOUND);
     }
 }

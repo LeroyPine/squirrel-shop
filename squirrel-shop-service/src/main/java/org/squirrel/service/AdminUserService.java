@@ -37,7 +37,7 @@ public class AdminUserService {
         QueryWrapper<AdminUserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_name", username);
         AdminUserInfo adminUserInfo = adminUserMapper.selectOne(queryWrapper);
-        return Optional.ofNullable(adminUserInfo).orElseThrow(() -> new UserNameNotFoundException(ImmutableMap.of("username", username)));
+        return Optional.ofNullable(adminUserInfo).orElseThrow(UserNameNotFoundException::new);
     }
 
     public AdminUserInfo findById(Integer userId) {

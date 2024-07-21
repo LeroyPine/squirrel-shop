@@ -11,23 +11,18 @@ import java.util.Map;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-abstract class BaseException extends RuntimeException {
+public class BizException extends RuntimeException {
     private final ErrorCode errorCode;
-    private final transient HashMap<String, Object> data = new HashMap<>();
 
-    BaseException(ErrorCode errorCode, Map<String, Object> data) {
+    public BizException(ErrorCode errorCode) {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
-        if (!ObjectUtils.isEmpty(data)) {
-            this.data.putAll(data);
-        }
+
     }
 
-    BaseException(ErrorCode errorCode, Map<String, Object> data, Throwable cause) {
+    public BizException(ErrorCode errorCode, Throwable cause) {
         super(errorCode.getMessage(), cause);
         this.errorCode = errorCode;
-        if (!ObjectUtils.isEmpty(data)) {
-            this.data.putAll(data);
-        }
+
     }
 }
