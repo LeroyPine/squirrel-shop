@@ -51,9 +51,9 @@ public class AuthController {
 
     @Operation(summary = "testJwt", description = "testJwt")
     @PostMapping("/testJwt")
-    public String testJwt(@RequestHeader(value = SecurityConstants.TOKEN_HEADER) String Authorization) {
+    public void testJwt(@RequestHeader(value = SecurityConstants.TOKEN_HEADER) String Authorization) {
         log.info("testJwt");
-        return "jwt";
+
     }
 
 }

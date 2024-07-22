@@ -1,8 +1,11 @@
 package org.squirrel.handler;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.squirrel.constant.ErrorCode;
 import org.squirrel.exception.TokenExpireException;
+import org.squirrel.vo.ApiResponse;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +27,9 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest httpServletRequest,
                          HttpServletResponse httpServletResponse,
                          AuthenticationException e) throws IOException, ServletException {
-        throw new TokenExpireException();
+        httpServletResponse.setContentType("application/json");
+        httpServletResponse.setCharacterEncoding("UTF-8");
+        ApiResponse<String> stringApiResponse = ApiResponse.errorToken(ErrorCode.TOKEN_EXPIRED.getCode(), ErrorCode.TOKEN_EXPIRED.getMessage());
+        httpServletResponse.getWriter().write(JSONObject.toJSONString(stringApiResponse));
     }
 }

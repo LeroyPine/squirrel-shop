@@ -26,6 +26,7 @@ public class SecurityConstants {
             "/swagger-ui.html",
             "/swagger-ui/**",
             "/v3/api-docs/**",
+            "/**/**"
     };
 
     public static final String[] TEST_WHITELIST = {

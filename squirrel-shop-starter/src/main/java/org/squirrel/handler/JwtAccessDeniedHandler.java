@@ -1,9 +1,13 @@
 package org.squirrel.handler;
 
+import com.alibaba.fastjson.JSONObject;
+import org.checkerframework.checker.units.qual.A;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.squirrel.constant.ErrorCode;
 import org.squirrel.exception.BizException;
+import org.squirrel.vo.ApiResponse;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +26,9 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
      */
     @Override
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException {
-        throw new BizException(ErrorCode.INSUFFICIENT_PERMISSIONS);
+        httpServletResponse.setContentType("application/json");
+        httpServletResponse.setCharacterEncoding("UTF-8");
+        ApiResponse<String> stringApiResponse = ApiResponse.errorToken(ErrorCode.VERIFY_JWT_FAILED.getCode(), ErrorCode.VERIFY_JWT_FAILED.getMessage());
+        httpServletResponse.getWriter().write(JSONObject.toJSONString(stringApiResponse));
     }
 }

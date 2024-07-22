@@ -10,7 +10,7 @@ import org.squirrel.constant.SecurityConstants;
 import org.squirrel.dto.LoginRequest;
 import org.squirrel.dto.UserInfoDto;
 import org.squirrel.exception.BizException;
-import org.squirrel.exception.TokenInvalidException;
+import org.squirrel.exception.RefreshTokenException;
 import org.squirrel.po.AdminUserInfo;
 import util.JwtTokenUtils;
 
@@ -53,14 +53,14 @@ public class AuthService {
 
     public String refreshToken(String refreshToken) {
         if (StringUtils.isBlank(refreshToken)) {
-            throw new TokenInvalidException(ErrorCode.VERIFY_JWT_FAILED);
+            throw new RefreshTokenException(ErrorCode.VERIFY_JWT_FAILED);
         }
         String userIdStr = JwtTokenUtils.getRefreshId(refreshToken);
         Integer userId = Integer.parseInt(userIdStr);
         String refreshTokenKey = SecurityConstants.getRefreshTokenKey(userId);
         String refreshTokenFromCache = (String) cacheTemplate.getIfPresent(refreshTokenKey);
         if (!refreshToken.equals(refreshTokenFromCache)) {
-            throw new TokenInvalidException(ErrorCode.VERIFY_JWT_FAILED  );
+            throw new RefreshTokenException(ErrorCode.VERIFY_JWT_FAILED);
         }
         // 重新生成token
         AdminUserInfo userInfo = adminUserService.findById(userId);

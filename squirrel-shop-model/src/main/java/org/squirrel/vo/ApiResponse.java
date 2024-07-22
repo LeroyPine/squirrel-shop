@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class ApiResponse<T> {
 
-    private int status;
+    private int code;
     private String message;
     private T data;
 
@@ -17,9 +17,18 @@ public class ApiResponse<T> {
     public ApiResponse() {
     }
 
-    public ApiResponse(int status, String message, T data) {
-        this.status = status;
+    public ApiResponse(int code, String message, T data) {
+        this.code = code;
         this.message = message;
         this.data = data;
+    }
+
+
+    public static ApiResponse<String> error(String message) {
+        return new ApiResponse<>(-1, message, null);
+    }
+
+    public static ApiResponse<String> errorToken(int code, String message) {
+        return new ApiResponse<>(code, message, null);
     }
 }

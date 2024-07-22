@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+/**
+ * @author luobaosong
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class BizException extends RuntimeException {

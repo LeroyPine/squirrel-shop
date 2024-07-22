@@ -23,15 +23,6 @@ public class AdminUserService {
 
     private final AdminUserMapper adminUserMapper;
 
-    /**
-     * 查看管理员信息
-     */
-    public List<AdminUserInfo> findAll() {
-        List<AdminUserInfo> adminUserInfos = adminUserMapper.selectList(null);
-        log.info("adminUserInfos : {}", adminUserInfos);
-        return adminUserInfos;
-    }
-
 
     public AdminUserInfo findByName(String username) {
         QueryWrapper<AdminUserInfo> queryWrapper = new QueryWrapper<>();

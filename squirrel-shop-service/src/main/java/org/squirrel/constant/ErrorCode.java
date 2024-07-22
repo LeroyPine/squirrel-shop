@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
     USER_NAME_NOT_FOUND(1002, "未找到指定用户"),
-    VERIFY_JWT_FAILED(1003, "token验证失败"),
+    VERIFY_JWT_FAILED(1003, "刷新token验证失败"),
     METHOD_ARGUMENT_NOT_VALID(1003, "方法参数验证失败"),
     PASSWORD_NOT_VALID(1004, "请输入正确的密码!"),
     TOKEN_EXPIRED(1005, "token已过期"),
