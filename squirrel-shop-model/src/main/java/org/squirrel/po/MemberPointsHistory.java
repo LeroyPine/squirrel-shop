@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -14,6 +17,9 @@ import java.util.Date;
  * @date 2024-07-22 09:45
  */
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @TableName("member_points_history")
 public class MemberPointsHistory {
 
@@ -51,7 +57,26 @@ public class MemberPointsHistory {
      * 变更描述
      */
     @TableField(value = "change_desc")
-    private Integer changeDesc;
+    private String changeDesc;
+
+
+    /**
+     * 消费金额
+     */
+    @TableField(value = "amount")
+    private BigDecimal amount;
+
+    /**
+     * 兑换积分
+     */
+    @TableField(value = "redeemed_points")
+    private Integer redeemedPoints;
+
+    /**
+     * 备注
+     */
+    @TableField(value = "remark")
+    private String remark;
 
     /**
      * 创建时间

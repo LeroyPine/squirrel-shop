@@ -11,7 +11,7 @@ import lombok.Data;
 public class PageDto {
 
     @Schema(description = "第几页")
-    private int page;
+    private int page = 1;
 
     @Schema(description = "分页数量")
     private int pageSize = 20;

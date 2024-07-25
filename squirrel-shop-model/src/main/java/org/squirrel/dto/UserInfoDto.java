@@ -1,26 +1,36 @@
 package org.squirrel.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.List;
+import lombok.NoArgsConstructor;
 
 /**
  * @author luobaosong
- * @date 2024-06-20 21:59
+ * @date 2024-07-23 16:07
  */
 @Data
-@Schema(description = "用户信息")
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserInfoDto {
 
+    @Schema(description = "用户ID")
     private Integer userId;
+
+    @Schema(description = "用户名称")
     private String userName;
-    private List<String> roles;
-    @JsonIgnore
-    private String token;
-    @JsonIgnore
-    private String refreshToken;
+
+    @Schema(description = "用户密码")
+    private String userPwd;
+
+    @Schema(description = "用户头像")
+    private String avatar;
+
+    @Schema(description = "用户电话")
+    private String phone;
+
+    @Schema(description = "用户积分")
+    private Integer points;
 }

@@ -8,6 +8,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import org.squirrel.constant.SecurityConstants;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.squirrel.dto.UserDetail;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
@@ -95,7 +96,10 @@ public class JwtTokenUtils {
         DecodedJWT jwt = getJwt(token, SECRET_KEY);
         List<SimpleGrantedAuthority> authorities = getAuthorities(jwt);
         String userName = jwt.getSubject();
-        return new UsernamePasswordAuthenticationToken(userName, token, authorities);
+        Integer userId = Integer.parseInt(jwt.getId());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userName, token, authorities);
+        authenticationToken.setDetails(new UserDetail(userId, userName));
+        return authenticationToken;
     }
 
 

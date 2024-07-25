@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.squirrel.constant.SecurityConstants;
 import org.squirrel.dto.LoginRequest;
-import org.squirrel.dto.UserInfoDto;
+import org.squirrel.dto.AdminUserInfoDto;
 import org.squirrel.service.AuthService;
 
 /**
@@ -29,13 +29,13 @@ public class AuthController {
 
     @Operation(summary = "登陆", description = "用户登录")
     @PostMapping("/login")
-    public ResponseEntity<UserInfoDto> login(@RequestBody LoginRequest loginRequest) {
-        UserInfoDto userInfoDto = authService.createToken(loginRequest);
+    public ResponseEntity<AdminUserInfoDto> login(@RequestBody LoginRequest loginRequest) {
+        AdminUserInfoDto adminUserInfoDto = authService.createToken(loginRequest);
         // 将token添加到响应头
         HttpHeaders headers = new HttpHeaders();
-        headers.set(SecurityConstants.TOKEN_HEADER, userInfoDto.getToken());
-        headers.set(SecurityConstants.REFRESH_TOKEN, userInfoDto.getRefreshToken());
-        return new ResponseEntity<>(userInfoDto, headers, HttpStatus.OK);
+        headers.set(SecurityConstants.TOKEN_HEADER, adminUserInfoDto.getToken());
+        headers.set(SecurityConstants.REFRESH_TOKEN, adminUserInfoDto.getRefreshToken());
+        return new ResponseEntity<>(adminUserInfoDto, headers, HttpStatus.OK);
     }
 
     @Operation(summary = "刷新token", description = "刷新token")

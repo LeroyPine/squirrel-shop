@@ -8,14 +8,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.squirrel.dto.PrizePointsConfigDto;
-import org.squirrel.enums.EnableEnum;
 import org.squirrel.mapper.PrizePointsConfigMapper;
-import org.squirrel.po.Prize;
 import org.squirrel.po.PrizePointsConfig;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**

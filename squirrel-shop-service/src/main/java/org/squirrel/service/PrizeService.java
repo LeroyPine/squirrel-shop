@@ -13,9 +13,13 @@ import org.squirrel.dto.PrizeDto;
 import org.squirrel.dto.PrizeParamDto;
 import org.squirrel.dto.SquirrelPageDto;
 import org.squirrel.mapper.PrizeMapper;
+import org.squirrel.mapper.PrizePointsConfigMapper;
 import org.squirrel.po.Prize;
+import org.squirrel.po.PrizePointsConfig;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author luobaosong
@@ -27,6 +31,8 @@ import java.util.*;
 public class PrizeService {
 
     private final PrizeMapper prizeMapper;
+
+    private final PrizePointsConfigMapper prizePointsConfigMapper;
 
     /**
      * 保存奖品
@@ -55,7 +61,7 @@ public class PrizeService {
         int pageSize = prizeParamDto.getPageSize();
         Page<Prize> prizePage = new Page<>(page, pageSize);
         QueryWrapper<Prize> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(StringUtils.isNotBlank(prizeParamDto.getPrizeName()), "prize_name", prizeParamDto.getPrizeName());
+        queryWrapper.like(StringUtils.isNotBlank(prizeParamDto.getPrizeName()), "prize_name", prizeParamDto.getPrizeName());
         queryWrapper.eq(StringUtils.isNotBlank(prizeParamDto.getPrizeId()), "prize_id", prizeParamDto.getPrizeId());
         Page<Prize> prizePageInfo = prizeMapper.selectPage(prizePage, queryWrapper);
         long total = prizePageInfo.getTotal();
@@ -64,9 +70,16 @@ public class PrizeService {
         }
         List<Prize> records = prizePageInfo.getRecords();
         List<PrizeDto> prizeDtoList = new ArrayList<>();
+
+        List<String> prizeIdList = records.stream().map(Prize::getPrizeId).collect(Collectors.toList());
+        List<PrizePointsConfig> prizePointsConfigs = prizePointsConfigMapper.selectBatchPrizeIds(prizeIdList);
+        Map<String, PrizePointsConfig> prizeIdPointsMap = prizePointsConfigs.stream().collect(Collectors.toMap(PrizePointsConfig::getPrizeId, Function.identity()));
+
         for (Prize prize : records) {
             PrizeDto prizeDto = new PrizeDto();
+            PrizePointsConfig prizePointsConfig = prizeIdPointsMap.get(prize.getPrizeId());
             BeanUtils.copyProperties(prize, prizeDto);
+            prizeDto.setPoints(prizePointsConfig.getPoints());
             prizeDtoList.add(prizeDto);
         }
         SquirrelPageDto<PrizeDto> prizeDtoPage = new SquirrelPageDto<>(page, pageSize, total, prizeDtoList);
@@ -84,16 +97,9 @@ public class PrizeService {
         if (StringUtils.isBlank(prizeId)) {
             return null;
         }
-        QueryWrapper<Prize> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("prize_id", prizeId);
-        Prize prize = prizeMapper.selectOne(queryWrapper);
-        if (Objects.isNull(prize)) {
-            return null;
-        }
-        PrizeDto prizeDto = new PrizeDto();
-        BeanUtils.copyProperties(prize, prizeDto);
-        log.info("findPrizeById prize:{}", JSONObject.toJSONString(prizeDto));
-        return prizeDto;
+        PrizeDto prize = prizeMapper.selectPrizeByPrizeId(prizeId);
+        log.info("findPrizeById prize:{}", JSONObject.toJSONString(prize));
+        return prize;
     }
 
     /**
@@ -116,10 +122,7 @@ public class PrizeService {
      *
      * @param prizeId 奖品ID
      */
-    public int reducePrizeNum(String prizeId) {
-        UpdateWrapper<Prize> updateWrapper = new UpdateWrapper<>();
-        String sql = String.format("update prize set prize_num = prize_num -1 where prize_num > 0 and id = %s", prizeId);
-        updateWrapper.setSql(sql);
-        return prizeMapper.update(null, updateWrapper);
+    public int reducePrizeNum(String prizeId, Integer num) {
+        return prizeMapper.reducePrizeNum(prizeId, num);
     }
 }

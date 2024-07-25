@@ -145,7 +145,7 @@ Sea un patrocinante y coloque su logo en nuestro LEEME en GitHub con un enlace d
 - Tablero de indicadores
 - Página de Guías
 - ECharts (Gráficos)
-- Portapapeles
+rtapapeles
 - Convertidor de Markdown a HTML
 ```
 

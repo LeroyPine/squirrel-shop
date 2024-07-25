@@ -1,17 +1,16 @@
 package org.squirrel.biz;
 
+import com.github.f4b6a3.uuid.UuidCreator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.squirrel.dto.PrizeDto;
 import org.squirrel.dto.PrizePointsConfigDto;
 import org.squirrel.enums.EnableEnum;
-import org.squirrel.po.PrizePointsConfig;
 import org.squirrel.service.PrizePointsConfigService;
 import org.squirrel.service.PrizeService;
 
 import javax.annotation.Resource;
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * @author luobaosong
@@ -29,7 +28,7 @@ public class PrizeBizService {
     @Transactional(rollbackFor = Exception.class)
     public void savePrize(PrizeDto prizeDto) {
         // 保存奖品信息
-        String prizeId = UUID.randomUUID().toString();
+        String prizeId = UuidCreator.getTimeOrdered().toString();
         prizeDto.setPrizeId(prizeId);
         prizeService.savePrize(prizeDto);
 

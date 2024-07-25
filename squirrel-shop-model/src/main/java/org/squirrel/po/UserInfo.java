@@ -6,47 +6,45 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * @author luobaosong
- * @date 2024-07-22 09:45
+ * @date 2024-07-23 15:38
  */
 @Data
-@TableName("member_points_config")
-public class MemberPointsConfig {
+@TableName("user_info")
+public class UserInfo {
 
     /**
-     * 主键
+     * 用户id
      */
-    @TableId(type = IdType.AUTO)
-    private Integer id;
+    @TableId(type = IdType.AUTO, value = "user_id")
+    private Integer userId;
 
     /**
-     * 配置名称
+     * 用户名称
      */
-    @TableField(value = "config_name")
-    private String configName;
+    @TableField(value = "user_name")
+    private String userName;
 
     /**
-     * 配置规则
+     * 用户密码
      */
-    @TableField(value = "config_rule")
-    private String configRule;
-
-
-    /**
-     * 配置类型
-     */
-    @TableField(value = "config_type")
-    private Integer configType;
+    @TableField(value = "user_pwd")
+    private String userPwd;
 
     /**
-     * 状态 1有效 0无效
+     * 头像
      */
-    @TableField(value = "status")
-    private Integer status;
+    @TableField(value = "avatar")
+    private String avatar;
+
+    /**
+     * 手机号
+     */
+    @TableField(value = "phone")
+    private String phone;
 
     /**
      * 创建时间

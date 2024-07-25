@@ -15,6 +15,8 @@ public enum ErrorCode {
     PASSWORD_NOT_VALID(1004, "请输入正确的密码!"),
     TOKEN_EXPIRED(1005, "token已过期"),
     INSUFFICIENT_PERMISSIONS(1006, "权限不够"),
+    POINT_NOT_ENOUGH(1007, "用户所剩积分不足以兑换该奖品!"),
+    BUY_DETAIL_DUP(1008, "消费明细不能存在提交多个重复的商品,可进行单个商品数量的变更!"),
 
     ;
     private final int code;

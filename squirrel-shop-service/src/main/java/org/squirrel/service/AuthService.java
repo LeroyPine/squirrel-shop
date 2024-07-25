@@ -1,14 +1,19 @@
 package org.squirrel.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.benmanes.caffeine.cache.Cache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.squirrel.constant.ErrorCode;
 import org.squirrel.constant.SecurityConstants;
 import org.squirrel.dto.LoginRequest;
-import org.squirrel.dto.UserInfoDto;
+import org.squirrel.dto.AdminUserInfoDto;
+import org.squirrel.dto.UserDetail;
 import org.squirrel.exception.BizException;
 import org.squirrel.exception.RefreshTokenException;
 import org.squirrel.po.AdminUserInfo;
@@ -30,7 +35,7 @@ public class AuthService {
     private final Cache<String, Object> cacheTemplate;
 
 
-    public UserInfoDto createToken(LoginRequest loginRequest) {
+    public AdminUserInfoDto createToken(LoginRequest loginRequest) {
         AdminUserInfo userInfo = adminUserService.findByName(loginRequest.getUsername());
         if (!userInfo.getUserPwd().equals(loginRequest.getPassword())) {
             throw new BizException(ErrorCode.PASSWORD_NOT_VALID);
@@ -42,7 +47,7 @@ public class AuthService {
         log.info("userId:{},token:{},refreshToken:{}", userInfo.getUserId(), token, refreshToken);
         cacheTemplate.put(String.valueOf(userInfo.getUserId()), token);
         cacheTemplate.put(SecurityConstants.getRefreshTokenKey(userInfo.getUserId()), refreshToken);
-        return UserInfoDto.builder()
+        return AdminUserInfoDto.builder()
                 .userId(userInfo.getUserId())
                 .userName(userInfo.getUserName())
                 .roles(roles)
@@ -68,5 +73,16 @@ public class AuthService {
         String token = JwtTokenUtils.generateToken(userInfo.getUserName(), userInfo.getUserId(), roles);
         cacheTemplate.put(String.valueOf(userInfo.getUserId()), token);
         return SecurityConstants.TOKEN_PREFIX + token;
+    }
+
+
+    /**
+     * 获取当前登陆用户ID
+     */
+    public Integer getCurrentUserId() {
+        UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        String userDetailStr = JSONObject.toJSONString(authentication.getDetails());
+        UserDetail userDetail = JSONObject.parseObject(userDetailStr, UserDetail.class);
+        return userDetail.getUserId();
     }
 }
