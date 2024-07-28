@@ -41,4 +41,11 @@ public class MemberPointsHistoryDetailService {
         memberPointsHistoryDetailMapper.updateById(memberPointsHistoryDetail);
     }
 
+    public List<MemberPointsHistoryDetail> findPointsHistoryDetailList(List<Integer> historyId) {
+        QueryWrapper<MemberPointsHistoryDetail> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("history_id", historyId);
+        queryWrapper.orderByDesc("history_id");
+        return memberPointsHistoryDetailMapper.selectList(queryWrapper);
+    }
+
 }

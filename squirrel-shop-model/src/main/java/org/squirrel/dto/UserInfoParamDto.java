@@ -15,6 +15,9 @@ public class UserInfoParamDto extends PageDto {
     @Schema(description = "用户名称")
     private String userName;
 
-    @Schema(description = "奖品ID")
+    @Schema(description = "用户ID")
     private Integer userId;
+
+    @Schema(description = "用户电话")
+    private String phone;
 }

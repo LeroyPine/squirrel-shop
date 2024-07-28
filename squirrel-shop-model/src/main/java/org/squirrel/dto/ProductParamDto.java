@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class ProductParamDto extends PageDto {
 
-    @Schema(description = "奖品名称")
+    @Schema(description = "商品名称")
     private String productName;
 
     @Schema(description = "奖品ID")

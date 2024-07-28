@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.squirrel.mapper.MemberPointsMapper">
+
+    <select id="selectMemberPoints" resultType="org.squirrel.po.MemberPoints">
+        select * from member_points where user_id in
+        <foreach collection="list" item="item" index="index" open="(" close=")"
+                 separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="getMemberPointsList" resultType="org.squirrel.dto.MemberPointsListDto">
+        select u.user_id,u.user_name,u.phone,mp.points,mp.update_date
+        from user_info u left join member_points mp on u.user_id = mp.user_id
+        <where>
+            <if test="memberPoints.userName != null and memberPoints.userName != ''">
+                u.user_name LIKE CONCAT('%', #{memberPoints.userName}, '%')
+            </if>
+            <if test="memberPoints.phone != null and memberPoints.phone != ''">
+                u.phone LIKE CONCAT('%', #{memberPoints.phone}, '%')
+            </if>
+            <if test="memberPoints.startTime != null">
+                mp.update_date &gt;= #{memberPoints.startTime}
+            </if>
+            <if test="memberPoints.endTime != null">
+                mp.update_date &lt;= #{memberPoints.endTime}
+            </if>
+        </where>
+        order by mp.points desc
+    </select>
+</mapper>

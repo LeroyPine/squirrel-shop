@@ -85,4 +85,12 @@ public class AuthService {
         UserDetail userDetail = JSONObject.parseObject(userDetailStr, UserDetail.class);
         return userDetail.getUserId();
     }
+
+    /**
+     * 登出
+     */
+    public void logout(Integer userId) {
+        cacheTemplate.invalidate(userId);
+        cacheTemplate.invalidate(SecurityConstants.getRefreshTokenKey(userId));
+    }
 }

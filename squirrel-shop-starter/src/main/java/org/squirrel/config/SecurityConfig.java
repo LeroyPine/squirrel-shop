@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 指定的接口直接放行
                 .antMatchers(SecurityConstants.SWAGGER_WHITELIST).permitAll()
                 .antMatchers(SecurityConstants.TEST_WHITELIST).permitAll()
-                .antMatchers(HttpMethod.POST, SecurityConstants.SYSTEM_WHITELIST).permitAll()
+                .antMatchers(SecurityConstants.SYSTEM_WHITELIST).permitAll()
                 // 其他的接口都需要认证后才能请求
                 .anyRequest()
                 .authenticated()

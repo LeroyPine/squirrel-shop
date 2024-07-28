@@ -79,35 +79,11 @@ export const constantRoutes = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
+        meta: { title: '数据统计', icon: 'dashboard', affix: true }
       }
     ]
   },
-  {
-    path: '/documentation',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/documentation/index'),
-        name: 'Documentation',
-        meta: { title: 'Documentation', icon: 'documentation', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/guide',
-    component: Layout,
-    redirect: '/guide/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/guide/index'),
-        name: 'Guide',
-        meta: { title: 'Guide', icon: 'guide', noCache: true }
-      }
-    ]
-  },
+
   {
     path: '/profile',
     component: Layout,
@@ -129,48 +105,105 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
+
+  /** when your routing map is too long, you can split it into small modules **/
+  /* componentsRouter,
+  chartsRouter,
+  /* nestedRouter,
+  tableRouter,*/
   {
-    path: '/permission',
+    path: '/member-point',
     component: Layout,
-    redirect: '/permission/page',
-    alwaysShow: true, // will always show the root menu
-    name: 'Permission',
+    redirect: '/member-point/list',
+    name: 'Point',
     meta: {
-      title: 'Permission',
-      icon: 'lock',
-      roles: ['admin', 'editor'] // you can set roles in root nav
+      title: '积分管理',
+      icon: 'shopping'
     },
     children: [
       {
-        path: 'page',
-        component: () => import('@/views/permission/page'),
-        name: 'PagePermission',
-        meta: {
-          title: 'Page Permission',
-          roles: ['admin'] // or you can only set roles in sub nav
-        }
+        path: 'config',
+        component: () => import('@/views/member-point/config'),
+        name: 'MemberPointsList',
+        meta: { title: '积分配置', icon: 'skill' }
       },
       {
-        path: 'directive',
-        component: () => import('@/views/permission/directive'),
-        name: 'DirectivePermission',
-        meta: {
-          title: 'Directive Permission'
-          // if do not set roles, means: this page does not require permission
-        }
+        path: 'list',
+        component: () => import('@/views/member-point/list'),
+        name: 'MemberPointsList',
+        meta: { title: '积分列表', icon: 'star' }
       },
       {
-        path: 'role',
-        component: () => import('@/views/permission/role'),
-        name: 'RolePermission',
-        meta: {
-          title: 'Role Permission',
-          roles: ['admin']
-        }
+        path: 'detail',
+        component: () => import('@/views/member-point/detail'),
+        name: 'MemberPointsDetailList',
+        meta: { title: '历史积分明细', icon: 'eye-open' }
+      },
+      {
+        path: 'supplementDetail',
+        component: () => import('@/views/member-point/supplementDetail.vue'),
+        name: 'supplementDetail',
+        meta: { title: '购物补充明细', icon: 'eye-open' },
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/list',
+    name: 'User',
+    meta: {
+      title: '用户管理',
+      icon: 'user'
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/user/list'),
+        name: 'UserList',
+        meta: { title: '用户管理', icon: 'user' }
       }
     ]
   },
 
+  {
+    path: '/prize',
+    component: Layout,
+    redirect: '/prize/list',
+    name: 'User',
+    meta: {
+      title: '奖品管理',
+      icon: 'theme'
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/prize/list'),
+        name: 'PrizeList',
+        meta: { title: '奖品管理', icon: 'theme' }
+      }
+    ]
+  },
+
+  {
+    path: '/product',
+    component: Layout,
+    redirect: '/product/list',
+    name: 'Product',
+    meta: {
+      title: '商品管理',
+      icon: 'el-icon-burger'
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/product/list'),
+        name: 'PrizeList',
+        meta: { title: '商品管理', icon: 'el-icon-burger' }
+      }
+    ]
+  },
   {
     path: '/icon',
     component: Layout,
@@ -183,45 +216,6 @@ export const asyncRoutes = [
       }
     ]
   },
-
-  /** when your routing map is too long, you can split it into small modules **/
-  /* componentsRouter,
-   chartsRouter,
-   nestedRouter,
-   tableRouter,*/
-
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/list',
-    name: 'Example',
-    meta: {
-      title: 'Example',
-      icon: 'el-icon-s-help'
-    },
-    children: [
-      {
-        path: 'create',
-        component: () => import('@/views/example/create'),
-        name: 'CreateArticle',
-        meta: { title: 'Create Article', icon: 'edit' }
-      },
-      {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/example/edit'),
-        name: 'EditArticle',
-        meta: { title: 'Edit Article', noCache: true, activeMenu: '/example/list' },
-        hidden: true
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/example/list'),
-        name: 'ArticleList',
-        meta: { title: 'Article List', icon: 'list' }
-      }
-    ]
-  },
-
   /* {
      path: '/tab',
      component: Layout,

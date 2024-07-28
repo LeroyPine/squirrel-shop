@@ -1,8 +1,12 @@
 package org.squirrel.dto;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -29,8 +33,10 @@ public class PrizeDto {
     private Integer prizeNum;
 
     @Schema(description = "修改时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateDate;
 
     @Schema(description = "奖品消耗的积分")
     private Integer points;
+
 }

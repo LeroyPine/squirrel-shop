@@ -2,6 +2,7 @@ package org.squirrel.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.ImmutableMap;
+import org.squirrel.dto.AdminUserDetailDto;
 import org.squirrel.exception.UserNameNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,6 @@ public class AdminUserService {
 
     private final AdminUserMapper adminUserMapper;
 
-
     public AdminUserInfo findByName(String username) {
         QueryWrapper<AdminUserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_name", username);
@@ -36,5 +36,6 @@ public class AdminUserService {
         queryWrapper.eq("user_id", userId);
         return adminUserMapper.selectOne(queryWrapper);
     }
+
 
 }

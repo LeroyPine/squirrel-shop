@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.squirrel.mapper.MemberPointsHistoryMapper">
+
+
+    <select id="findMemberPointsHistory" resultType="org.squirrel.dto.MemberPointsHistoryListDto">
+        select u.user_id,
+        u.user_name,
+        u.phone,
+        mph.id,
+        mph.amount,
+        mph.redeemed_points,
+        mph.change_type,
+        mph.change_desc,
+        mph.before_points,
+        mph.after_points,
+        mph.create_date,
+        mph.remark
+        from member_points_history mph
+        left join user_info u on mph.user_id = u.user_id
+        <where>
+            <if test="memberPoints.userName != null and memberPoints.userName != ''">
+                u.user_name LIKE CONCAT('%', #{memberPoints.userName}, '%')
+            </if>
+            <if test="memberPoints.phone != null and memberPoints.phone != ''">
+                u.phone LIKE CONCAT('%', #{memberPoints.phone}, '%')
+            </if>
+            <if test="memberPoints.startTime != null">
+                mph.create_date &gt;= #{memberPoints.startTime}
+            </if>
+            <if test="memberPoints.endTime != null">
+                mph.create_date &lt;= #{memberPoints.endTime}
+            </if>
+            <if test="memberPoints.changeType != null">
+                mph.change_type = #{memberPoints.changeType}
+            </if>
+        </where>
+        order by mph.update_date desc
+    </select>
+</mapper>

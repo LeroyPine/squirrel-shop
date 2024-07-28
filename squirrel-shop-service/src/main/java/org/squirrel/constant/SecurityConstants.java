@@ -25,8 +25,7 @@ public class SecurityConstants {
     public static final String[] SWAGGER_WHITELIST = {
             "/swagger-ui.html",
             "/swagger-ui/**",
-            "/v3/api-docs/**",
-            "/**/**"
+            "/v3/api-docs/**"
     };
 
     public static final String[] TEST_WHITELIST = {
@@ -35,7 +34,8 @@ public class SecurityConstants {
 
     public static final String[] SYSTEM_WHITELIST = {
             "/auth/login",
-            "/auth/refreshToken"
+            "/auth/refreshToken",
+            "/squirrel-shop/files/**"
     };
 
 

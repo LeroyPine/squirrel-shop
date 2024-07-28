@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -57,6 +58,7 @@ public class MemberPointsConfig {
     /**
      * 修改时间
      */
+    @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
     @TableField(value = "update_date")
     private Date updateDate;
 }

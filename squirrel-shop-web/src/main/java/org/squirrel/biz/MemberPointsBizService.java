@@ -1,13 +1,10 @@
 package org.squirrel.biz;
 
 import com.alibaba.fastjson.JSONObject;
-import com.github.f4b6a3.uuid.UuidCreator;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -23,11 +20,9 @@ import util.DateUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -133,7 +128,7 @@ public class MemberPointsBizService {
 
     public void buyProduct(BuyProductDto buyProductDto) {
         Integer userId = buyProductDto.getUserId();
-        BigDecimal price = buyProductDto.getPrice();
+        BigDecimal price = buyProductDto.getAmount();
         // 获取金额对应的积分配置
         MemberPointsConfigTypeEnum configTypeEnum = MemberChangeTypeEnum.MEMBER_CHANGE_TYPE_POINTS_CONFIG_MAP.get(MemberChangeTypeEnum.BUY_PRODUCT.getCode());
         MemberPointsConfig pointsConfig = memberPointsConfigService.findMemberPointsConfigByType(configTypeEnum.getCode());
@@ -170,11 +165,11 @@ public class MemberPointsBizService {
         memberPointsService.updateMemberPoints(updateMemberPoints);
 
         String changeDesc = String.format("用户%s,消费金额:%s,得到%s积分,剩余积分为:%s,时间:%s",
-                userName, buyProductDto.getPrice(), points, afterPoint, DateUtils.getCurrentDateTime());
+                userName, buyProductDto.getAmount(), points, afterPoint, DateUtils.getCurrentDateTime());
         // 记录消费记录
         MemberPointsHistory pointsHistory = MemberPointsHistory.builder()
                 .changeType(MemberChangeTypeEnum.BUY_PRODUCT.getCode())
-                .amount(buyProductDto.getPrice())
+                .amount(buyProductDto.getAmount())
                 .beforePoints(beforePoint)
                 .afterPoints(afterPoint)
                 .changeDesc(changeDesc)
@@ -197,7 +192,7 @@ public class MemberPointsBizService {
         BigDecimal amount = pointsHistory.getAmount();
         BigDecimal totalAmount = BigDecimal.ZERO;
         for (BuyProductDetailDto.ProductDetailDto productDetailDto : productDetailDtoList) {
-            totalAmount = totalAmount.add(BigDecimal.valueOf(productDetailDto.getProductNum()).multiply(productDetailDto.getPrice()));
+            totalAmount = totalAmount.add(BigDecimal.valueOf(productDetailDto.getProductNum()).multiply(productDetailDto.getProductMoney()));
         }
         if (amount.compareTo(totalAmount) != 0) {
             throw new IllegalArgumentException("录入的明细金额与客户此次购物消费金额不同,请修改!");
@@ -210,7 +205,7 @@ public class MemberPointsBizService {
                         .historyId(buyProductDetailDto.getHistoryId())
                         .productName(productDetailDto.getProductName())
                         .productId(productDetailDto.getProductId())
-                        .productMoney(productDetailDto.getPrice())
+                        .productMoney(productDetailDto.getProductMoney())
                         .productNum(productDetailDto.getProductNum())
                         .build();
                 memberPointsHistoryDetailService.saveMemberPointsHistoryDetail(memberPointsHistoryDetail);
@@ -229,7 +224,7 @@ public class MemberPointsBizService {
         productDetailDtoList.forEach(productDetailDto -> {
             productList.add(Product.builder()
                     .productName(productDetailDto.getProductName())
-                    .productMoney(productDetailDto.getPrice())
+                    .productMoney(productDetailDto.getProductMoney())
                     .build());
         });
         Map<String, String> productyNameIdMap = productService.saveProductByWithOutId(productList);
@@ -253,5 +248,25 @@ public class MemberPointsBizService {
         } catch (DuplicateKeyException e) {
             throw new BizException(ErrorCode.BUY_DETAIL_DUP);
         }
+    }
+
+    public SquirrelPageDto<MemberPointsHistoryListDto> getMemberPointsHistoryList(MemberPointsListParamDto memberPointsListParamDto) {
+        // 查询历史交易记录
+        SquirrelPageDto<MemberPointsHistoryListDto> historyListDto = memberPointsHistoryService.findMemberPointsHistory(memberPointsListParamDto);
+        if (CollectionUtils.isEmpty(historyListDto.getRecords())) {
+            return historyListDto;
+        }
+        // 交易记录id集合
+        List<Integer> historyIdList = historyListDto.getRecords().stream().map(MemberPointsHistoryListDto::getId).collect(Collectors.toList());
+        List<MemberPointsHistoryDetail> detailList = memberPointsHistoryDetailService.findPointsHistoryDetailList(historyIdList);
+        Map<Integer, List<MemberPointsHistoryDetail>> historyIdItemMap = detailList.stream().collect(Collectors.groupingBy(MemberPointsHistoryDetail::getHistoryId));
+        // 设置明细
+        historyListDto.getRecords().forEach(history -> {
+            List<MemberPointsHistoryDetail> memberPointsHistoryDetails = historyIdItemMap.get(history.getId());
+            if (!CollectionUtils.isEmpty(memberPointsHistoryDetails)) {
+                history.setDetailList(memberPointsHistoryDetails);
+            }
+        });
+        return historyListDto;
     }
 }

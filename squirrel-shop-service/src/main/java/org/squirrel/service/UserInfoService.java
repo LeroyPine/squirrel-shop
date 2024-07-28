@@ -60,12 +60,13 @@ public class UserInfoService {
     /**
      * 获取所有用户信息
      */
-    public SquirrelPageDto<UserInfoDto> getAllUserInfo(UserInfoParamDto userInfoParamDto) {
+    public SquirrelPageDto<UserInfo> getAllUserInfo(UserInfoParamDto userInfoParamDto) {
         int page = userInfoParamDto.getPage();
         int pageSize = userInfoParamDto.getPageSize();
         Page<UserInfo> userPage = new Page<>(page, pageSize);
         QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(StringUtils.isNotBlank(userInfoParamDto.getUserName()), "user_name", userInfoParamDto.getUserName());
+        queryWrapper.like(StringUtils.isNotBlank(userInfoParamDto.getUserName()), "user_name", userInfoParamDto.getUserName());
+        queryWrapper.eq(StringUtils.isNotBlank(userInfoParamDto.getPhone()), "phone", userInfoParamDto.getPhone());
         queryWrapper.eq(Objects.nonNull(userInfoParamDto.getUserId()), "user_id", userInfoParamDto.getUserId());
         Page<UserInfo> userPageInfo = userInfoMapper.selectPage(userPage, queryWrapper);
         long total = userPageInfo.getTotal();
@@ -73,15 +74,7 @@ public class UserInfoService {
             return new SquirrelPageDto<>(page, pageSize, total);
         }
         List<UserInfo> records = userPageInfo.getRecords();
-        List<UserInfoDto> prizeDtoList = new ArrayList<>();
-        for (UserInfo userInfo : records) {
-            UserInfoDto userInfoDto = new UserInfoDto();
-            BeanUtils.copyProperties(userInfo, userInfoDto);
-            prizeDtoList.add(userInfoDto);
-        }
-        SquirrelPageDto<UserInfoDto> userInfoPageDto = new SquirrelPageDto<>(page, pageSize, total, prizeDtoList);
-        log.info("getAllUserInfo : {}", JSONObject.toJSONString(userInfoPageDto));
-        return userInfoPageDto;
+        return new SquirrelPageDto<>(page, pageSize, total, records);
     }
 
     public UserInfoDto findUserInfoByUserId(Integer userId) {

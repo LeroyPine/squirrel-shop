@@ -4,9 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 import org.squirrel.biz.MemberPointsBizService;
-import org.squirrel.dto.BuyProductDetailDto;
-import org.squirrel.dto.BuyProductDto;
-import org.squirrel.dto.RedeemPrizeDto;
+import org.squirrel.dto.*;
+import org.squirrel.service.MemberPointsService;
 
 import javax.annotation.Resource;
 
@@ -21,6 +20,8 @@ public class MemberPointsController {
 
     @Resource
     private MemberPointsBizService memberPointsBizService;
+    @Resource
+    private MemberPointsService memberPointsService;
 
 
     @Operation(summary = "兑换奖品", description = "兑换奖品")
@@ -41,6 +42,19 @@ public class MemberPointsController {
     @PostMapping("/buyProductDetail")
     public void buyProductDetail(@RequestBody BuyProductDetailDto buyProductDetailDto) {
         memberPointsBizService.buyProductDetail(buyProductDetailDto);
+    }
+
+    @Operation(summary = "会员积分列表", description = "会员积分列表")
+    @PostMapping("/list")
+    public SquirrelPageDto<MemberPointsListDto> memberPointsList(@RequestBody MemberPointsListParamDto memberPointsListParamDto) {
+        return memberPointsService.getMemberPointsList(memberPointsListParamDto);
+    }
+
+
+    @Operation(summary = "会员积分明细", description = "会员积分明细")
+    @PostMapping("/historyList")
+    public SquirrelPageDto<MemberPointsHistoryListDto> memberPointsHistoryList(@RequestBody MemberPointsListParamDto memberPointsListParamDto) {
+        return memberPointsBizService.getMemberPointsHistoryList(memberPointsListParamDto);
     }
 
 

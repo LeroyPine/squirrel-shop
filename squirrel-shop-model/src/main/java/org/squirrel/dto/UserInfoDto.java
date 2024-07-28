@@ -22,14 +22,14 @@ public class UserInfoDto {
     @Schema(description = "用户名称")
     private String userName;
 
-    @Schema(description = "用户密码")
-    private String userPwd;
-
     @Schema(description = "用户头像")
     private String avatar;
 
     @Schema(description = "用户电话")
     private String phone;
+
+    @Schema(description = "用户地址")
+    private String address;
 
     @Schema(description = "用户积分")
     private Integer points;

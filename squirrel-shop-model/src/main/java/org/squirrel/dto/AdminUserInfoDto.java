@@ -18,6 +18,7 @@ public class AdminUserInfoDto {
 
     private Integer userId;
     private String userName;
+    @JsonIgnore
     private List<String> roles;
     @JsonIgnore
     private String token;

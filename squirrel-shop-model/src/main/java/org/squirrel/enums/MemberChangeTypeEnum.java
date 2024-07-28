@@ -16,7 +16,7 @@ public enum MemberChangeTypeEnum {
 
     UPDATE_BASE_INFO(1, "用户信息修改"),
     BUY_PRODUCT(2, "购买商品"),
-    REDEEMED_POINTS(3, "兑换积分"),
+    REDEEMED_POINTS(3, "积分兑换"),
 
     ;
 

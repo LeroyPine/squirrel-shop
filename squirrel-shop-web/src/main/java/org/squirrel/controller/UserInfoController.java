@@ -26,14 +26,14 @@ public class UserInfoController {
 
     @Operation(summary = "保存用户信息", description = "保存用户信息")
     @PostMapping("/saveUserInfo")
-    public void saveUserInfo(@RequestParam UserInfoDto userInfoDto) {
+    public void saveUserInfo(@RequestBody UserInfoDto userInfoDto) {
         userInfoBizService.saveUserInfo(userInfoDto);
     }
 
 
     @Operation(summary = "修改用户信息", description = "修改用户信息")
     @PostMapping("/updateUserInfo")
-    public void updateUserInfo(@RequestParam UserInfoDto userInfoDto) {
+    public void updateUserInfo(@RequestBody UserInfoDto userInfoDto) {
         userInfoBizService.updateUserInfo(userInfoDto);
     }
 
@@ -41,7 +41,7 @@ public class UserInfoController {
     @Operation(summary = "获取所有用户信息", description = "获取所有用户信息")
     @PostMapping("/getAllUser")
     public SquirrelPageDto<UserInfoDto> getAllUserInfo(@RequestBody UserInfoParamDto userInfoParamDto) {
-        return userInfoService.getAllUserInfo(userInfoParamDto);
+        return userInfoBizService.getAllUserInfo(userInfoParamDto);
     }
 
 

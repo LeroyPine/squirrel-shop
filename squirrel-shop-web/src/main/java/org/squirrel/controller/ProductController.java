@@ -32,4 +32,16 @@ public class ProductController {
         return productService.findAllProduct(productParamDto);
     }
 
+    @Operation(summary = "保存商品", description = "保存商品")
+    @PostMapping("/saveProduct")
+    public void saveProduct(@RequestBody Product product) {
+        productService.saveProduct(product);
+    }
+
+    @Operation(summary = "修改商品", description = "修改商品")
+    @PostMapping("/updateProduct")
+    public void updateProduct(@RequestBody Product product) {
+        productService.updateProduct(product);
+    }
+
 }

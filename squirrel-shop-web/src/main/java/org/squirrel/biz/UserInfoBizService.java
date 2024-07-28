@@ -1,20 +1,27 @@
 package org.squirrel.biz;
 
+import com.google.common.collect.Lists;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.squirrel.dto.SquirrelPageDto;
 import org.squirrel.dto.UserInfoDto;
 import org.squirrel.dto.UserInfoParamDto;
 import org.squirrel.enums.MemberChangeTypeEnum;
 import org.squirrel.po.MemberPoints;
 import org.squirrel.po.MemberPointsHistory;
+import org.squirrel.po.UserInfo;
 import org.squirrel.service.MemberPointsHistoryService;
 import org.squirrel.service.MemberPointsService;
 import org.squirrel.service.UserInfoService;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author luobaosong
@@ -55,7 +62,7 @@ public class UserInfoBizService {
                 .userId(userId)
                 .beforePoints(0)
                 .afterPoints(userInfoDto.getPoints())
-                .changeDesc("saveUserInfo 变更用户信息,积分更新为:" + userInfoDto.getPoints())
+                .changeDesc("管理员初始化用户信息,积分更新为:" + userInfoDto.getPoints())
                 .build();
         memberPointsHistoryService.saveMemberPointsHistory(pointsHistory);
     }
@@ -95,9 +102,30 @@ public class UserInfoBizService {
                 .userId(userInfoDto.getUserId())
                 .beforePoints(points)
                 .afterPoints(userInfoDto.getPoints())
-                .changeDesc("updateUserInfo 变更用户信息,积分更新为:" + userInfoDto.getPoints())
+                .changeDesc("管理员修改用户信息,积分更新为:" + userInfoDto.getPoints())
                 .build();
         memberPointsHistoryService.saveMemberPointsHistory(pointsHistory);
     }
 
+    public SquirrelPageDto<UserInfoDto> getAllUserInfo(UserInfoParamDto userInfoParamDto) {
+        SquirrelPageDto<UserInfo> allUserInfoPage = userInfoService.getAllUserInfo(userInfoParamDto);
+        long page = allUserInfoPage.getPage();
+        long pageSize = allUserInfoPage.getPageSize();
+        long total = allUserInfoPage.getTotal();
+        List<UserInfo> records = allUserInfoPage.getRecords();
+        if (CollectionUtils.isEmpty(records)) {
+            return new SquirrelPageDto<>(page, pageSize, total, null);
+        }
+        List<Integer> userIdList = records.stream().map(UserInfo::getUserId).collect(Collectors.toList());
+        List<MemberPoints> memberPoints = memberPointsService.selectMemberPoints(userIdList);
+        Map<Integer, Integer> userIdPointsMap = memberPoints.stream().collect(Collectors.toMap(MemberPoints::getUserId, MemberPoints::getPoints));
+        List<UserInfoDto> userInfoDtoList = Lists.newArrayList();
+        records.forEach(s -> {
+            UserInfoDto userInfoDto = new UserInfoDto();
+            BeanUtils.copyProperties(s, userInfoDto);
+            userInfoDto.setPoints(userIdPointsMap.get(s.getUserId()));
+            userInfoDtoList.add(userInfoDto);
+        });
+        return new SquirrelPageDto<>(page, pageSize, total, userInfoDtoList);
+    }
 }

@@ -3,6 +3,7 @@ package org.squirrel.po;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -79,6 +80,7 @@ public class Product {
     /**
      * 修改时间
      */
+    @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
     @TableField(value = "update_date")
     private Date updateDate;
 }

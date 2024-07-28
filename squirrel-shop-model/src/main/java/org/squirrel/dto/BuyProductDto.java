@@ -22,7 +22,7 @@ public class BuyProductDto {
     private Integer userId;
 
     @Schema(description = "消费总金额")
-    private BigDecimal price;
+    private BigDecimal amount;
 
     @Schema(description = "备注")
     private String remark;

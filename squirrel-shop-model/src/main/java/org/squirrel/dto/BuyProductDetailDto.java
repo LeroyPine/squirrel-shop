@@ -45,6 +45,6 @@ public class BuyProductDetailDto {
         private Integer productNum;
 
         @Schema(description = "商品单价")
-        private BigDecimal price;
+        private BigDecimal productMoney;
     }
 }

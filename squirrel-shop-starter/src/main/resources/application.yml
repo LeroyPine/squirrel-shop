@@ -1,8 +1,12 @@
 server:
-  port: 8080
+  port: 8999
 spring:
   profiles:
     active: dev
   banner:
     charset: UTF-8
     location: classpath:squirrel-banner.txt
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB

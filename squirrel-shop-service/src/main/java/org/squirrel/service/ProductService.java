@@ -59,6 +59,14 @@ public class ProductService {
     }
 
 
+    public void saveProduct(Product product) {
+        log.info("saveProduct product : {}", JSONObject.toJSONString(product));
+        product.setProductId(UuidCreator.getTimeOrdered().toString());
+        product.setProductStatus(ProductStatusEnum.VALID_STATUS.getCode());
+        product.setCreateDate(new Date());
+        productMapper.insert(product);
+    }
+
     public void updateProduct(Product product) {
         UpdateWrapper<Product> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("product_id", product.getProductId());

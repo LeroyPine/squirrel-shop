@@ -46,6 +46,9 @@ public class UserInfo {
     @TableField(value = "phone")
     private String phone;
 
+    @TableField(value = "address")
+    private String address;
+
     /**
      * 创建时间
      */
