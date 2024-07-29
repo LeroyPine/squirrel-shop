@@ -1,4 +1,4 @@
-const fa = require('element-ui/src/locale/lang/fa')
+
 module.exports = {
   title: 'Squirrel-shop',
 

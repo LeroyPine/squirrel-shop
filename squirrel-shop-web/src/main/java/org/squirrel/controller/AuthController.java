@@ -1,8 +1,10 @@
 package org.squirrel.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,7 @@ import java.util.List;
  * @author luobaosong
  * @date 2024-06-20 21:33
  */
+@Slf4j
 @Tag(name = "登陆API")
 @RestController
 @RequestMapping("/auth")
@@ -43,6 +46,7 @@ public class AuthController {
         HttpHeaders headers = new HttpHeaders();
         headers.set(SecurityConstants.TOKEN_HEADER, adminUserInfoDto.getToken());
         headers.set(SecurityConstants.REFRESH_TOKEN, adminUserInfoDto.getRefreshToken());
+        log.info("登陆：{}", JSONObject.toJSONString(adminUserInfoDto));
         return new ResponseEntity<>(adminUserInfoDto, headers, HttpStatus.OK);
     }
 

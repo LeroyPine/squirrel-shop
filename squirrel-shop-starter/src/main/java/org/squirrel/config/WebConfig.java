@@ -2,6 +2,7 @@ package org.squirrel.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -25,5 +26,16 @@ public class WebConfig implements WebMvcConfigurer {
             registry.addResourceHandler("/squirrel-shop/files/**")
                     .addResourceLocations("file:/Users/luobaosong/file/squirrel-shop/");
         }
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:8080")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .exposedHeaders("*");
+
+
     }
 }

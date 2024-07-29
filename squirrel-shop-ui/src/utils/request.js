@@ -58,8 +58,6 @@ service.interceptors.response.use(
     const res = response.data
     const url = response.config.url
     const config = response.config
-    const pro = response.config.proxy
-    console.log(pro)
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 200) {
       if (url.includes('/logout')) {
