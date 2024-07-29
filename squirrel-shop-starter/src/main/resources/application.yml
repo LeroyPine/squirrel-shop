@@ -2,7 +2,7 @@ server:
   port: 8999
 spring:
   profiles:
-    active: dev
+    active: prod
   banner:
     charset: UTF-8
     location: classpath:squirrel-banner.txt
