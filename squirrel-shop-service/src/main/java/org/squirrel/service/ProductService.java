@@ -10,11 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
-import org.squirrel.dto.PrizeDto;
-import org.squirrel.dto.PrizeParamDto;
-import org.squirrel.dto.ProductParamDto;
-import org.squirrel.dto.SquirrelPageDto;
+import org.squirrel.dto.*;
 import org.squirrel.enums.ProductStatusEnum;
 import org.squirrel.mapper.ProductMapper;
 import org.squirrel.po.Prize;
@@ -67,7 +65,9 @@ public class ProductService {
         productMapper.insert(product);
     }
 
-    public void updateProduct(Product product) {
+    public void updateProduct(ProductDto productDto) {
+        Product product = new Product();
+        BeanUtils.copyProperties(productDto, product);
         UpdateWrapper<Product> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("product_id", product.getProductId());
         log.info("updateProduct product : {}", JSONObject.toJSONString(product));
@@ -82,6 +82,7 @@ public class ProductService {
         QueryWrapper<Product> queryWrapper = new QueryWrapper<>();
         queryWrapper.like(StringUtils.isNotBlank(productParamDto.getProductName()), "product_name", productParamDto.getProductName());
         queryWrapper.eq(StringUtils.isNotBlank(productParamDto.getProductId()), "product_id", productParamDto.getProductId());
+        queryWrapper.orderByDesc("update_date");
         Page<Product> productDtoPage = productMapper.selectPage(productPage, queryWrapper);
         long total = productDtoPage.getTotal();
         if (total == 0) {

@@ -21,6 +21,13 @@
     </el-form>
 
     <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
+
+      <el-table-column align="center" label="交易ID" width="80">
+        <template v-slot="scope">
+          <span>{{ scope.row.id }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column align="center" label="用户ID" width="80">
         <template v-slot="scope">
           <span>{{ scope.row.userId }}</span>
@@ -75,7 +82,7 @@
     <!-- 明细弹框 -->
     <el-dialog :title="`交易明细 - ${currentTransaction.userName} - ${currentTransaction.typename}`" :visible.sync="detailDialogVisible" width="50%">
       <el-table v-if="currentTransaction.detailList && currentTransaction.detailList.length" :data="currentTransaction.detailList" border fit highlight-current-row style="width: 100%">
-        <el-table-column align="center" label="记录ID" width="80">
+        <el-table-column align="center" label="交易ID" width="80">
           <template v-slot="scope">
             <span>{{ scope.row.historyId }}</span>
           </template>
@@ -111,6 +118,9 @@
           </template>
         </el-table-column>
       </el-table>
+      <div v-else-if="currentTransaction.changeType === 1">
+        <span>信息修改无需录入明细</span>
+      </div>
       <div v-else>
         <el-button type="primary" @click="openSupplementDetail('choose')">选择商品</el-button>
         <el-button type="primary" @click="openSupplementDetail('manual')">手动录入</el-button>

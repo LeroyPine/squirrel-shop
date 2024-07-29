@@ -3,9 +3,12 @@ package org.squirrel.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.*;
 import org.squirrel.biz.UserInfoBizService;
+import org.squirrel.constant.ErrorCode;
 import org.squirrel.dto.*;
+import org.squirrel.exception.BizException;
 import org.squirrel.service.UserInfoService;
 
 import javax.annotation.Resource;
@@ -27,7 +30,11 @@ public class UserInfoController {
     @Operation(summary = "保存用户信息", description = "保存用户信息")
     @PostMapping("/saveUserInfo")
     public void saveUserInfo(@RequestBody UserInfoDto userInfoDto) {
-        userInfoBizService.saveUserInfo(userInfoDto);
+        try {
+            userInfoBizService.saveUserInfo(userInfoDto);
+        } catch (DuplicateKeyException e) {
+            throw new BizException(ErrorCode.USER_DUP);
+        }
     }
 
 

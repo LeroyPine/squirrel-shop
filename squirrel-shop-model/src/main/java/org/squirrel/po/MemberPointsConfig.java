@@ -58,7 +58,7 @@ public class MemberPointsConfig {
     /**
      * 修改时间
      */
-    @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(value = "update_date")
     private Date updateDate;
 }

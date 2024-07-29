@@ -68,6 +68,7 @@ public class UserInfoService {
         queryWrapper.like(StringUtils.isNotBlank(userInfoParamDto.getUserName()), "user_name", userInfoParamDto.getUserName());
         queryWrapper.eq(StringUtils.isNotBlank(userInfoParamDto.getPhone()), "phone", userInfoParamDto.getPhone());
         queryWrapper.eq(Objects.nonNull(userInfoParamDto.getUserId()), "user_id", userInfoParamDto.getUserId());
+        queryWrapper.orderByDesc("user_id");
         Page<UserInfo> userPageInfo = userInfoMapper.selectPage(userPage, queryWrapper);
         long total = userPageInfo.getTotal();
         if (total == 0) {

@@ -1,9 +1,8 @@
-package org.squirrel.po;
+package org.squirrel.dto;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,68 +20,47 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("product")
-public class Product {
+public class ProductDto {
 
     /**
      * 主键
      */
-    @TableId(type = IdType.AUTO)
     private Integer id;
 
     /**
      * 商品id
      */
-    @TableField(value = "product_id")
     private String productId;
 
     /**
      * 商品名称
      */
-    @TableField(value = "product_name")
     private String productName;
 
     /**
      * 商品状态
      */
-    @TableField(value = "product_status")
     private Integer productStatus;
 
 
     /**
      * 商品图片
      */
-    @TableField(value = "product_image")
     private String productImage;
 
     /**
      * 商品描述
      */
-    @TableField(value = "product_desc")
     private String productDesc;
 
     /**
      * 商品数量
      */
-    @TableField(value = "product_num")
     private Integer productNum;
 
     /**
      * 产品金额
      */
-    @TableField(value = "product_money")
     private BigDecimal productMoney;
 
-    /**
-     * 创建时间
-     */
-    @TableField(value = "create_date")
-    private Date createDate;
-
-    /**
-     * 修改时间
-     */
-   @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    @TableField(value = "update_date")
-    private Date updateDate;
 }

@@ -28,7 +28,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="120px" align="center" label="电话">
+      <el-table-column width="150px" align="center" label="电话">
         <template v-slot="scope">
           <span>{{ scope.row.phone }}</span>
         </template>
@@ -43,6 +43,12 @@
       <el-table-column min-width="20px" label="用户地址">
         <template v-slot="scope">
           <span>{{ scope.row.address }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="180px" label="最后修改时间">
+        <template v-slot="scope">
+          <span>{{ scope.row.updateDate }}</span>
         </template>
       </el-table-column>
 

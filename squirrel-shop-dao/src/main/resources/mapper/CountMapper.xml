@@ -25,20 +25,20 @@
                 create_date >= CURDATE() AND create_date &lt; CURDATE() + INTERVAL 1 DAY  and change_type =2
             </if>
             <if test="type == 2">
-                create_date >= CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY
-                AND create_date &lt; CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY + INTERVAL 7 DAY and change_type =2;
+                create_date >= CURDATE() - INTERVAL 6 DAY
+                AND create_date &lt; CURDATE() + INTERVAL 1 DAY
+                AND change_type = 2
             </if>
         </where>
     </select>
     <select id="countWeeklyMoney" resultType="org.squirrel.dto.WeeklyMoneyDto">
         SELECT DATE (create_date) as date, SUM(amount) as daily_income
         FROM member_points_history
-        WHERE create_date >= CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY
-          AND create_date
-         &lt; CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY + INTERVAL 7 DAY
-          AND change_type = 2
-        GROUP BY DATE (create_date)
-        ORDER BY date
+        WHERE create_date >= CURDATE() - INTERVAL 6 DAY
+        AND create_date &lt; CURDATE() + INTERVAL 1 DAY
+        AND change_type = 2
+        GROUP BY DATE(create_date)
+        ORDER BY date;
     </select>
     <select id="countPointByType" resultType="java.lang.Integer">
         SELECT sum(redeemed_points)

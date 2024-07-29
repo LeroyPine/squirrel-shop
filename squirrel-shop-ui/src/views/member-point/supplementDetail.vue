@@ -1,14 +1,14 @@
 <template>
   <div class="app-container">
     <el-form ref="supplementForm" :model="supplementForm" label-width="120px">
-      <el-form-item label="用户ID">
+      <el-form-item label="用户ID" hidden>
         <el-input v-model="supplementForm.userId" disabled />
-      </el-form-item>
-      <el-form-item label="用户名称">
-        <el-input v-model="supplementForm.userName" disabled />
       </el-form-item>
       <el-form-item label="交易ID">
         <el-input v-model="supplementForm.id" disabled />
+      </el-form-item>
+      <el-form-item label="用户名称">
+        <el-input v-model="supplementForm.userName" disabled />
       </el-form-item>
       <el-form-item label="交易金额">
         <el-input v-model="supplementForm.amount" disabled />
@@ -111,7 +111,7 @@ export default {
       productQuery: {
         page: 1,
         limit: 10,
-        search: ''
+        productName: ''
       },
       selectedProducts: [],
       productSearchQuery: ''
@@ -125,7 +125,7 @@ export default {
     getProductList() {
       const params = {
         ...this.productQuery,
-        search: this.productSearchQuery
+        productName: this.productSearchQuery
       }
       fetchProductList(params).then(response => {
         this.productList = response.data.records

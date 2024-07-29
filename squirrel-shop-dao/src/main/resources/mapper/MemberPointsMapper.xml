@@ -18,15 +18,15 @@
                 u.user_name LIKE CONCAT('%', #{memberPoints.userName}, '%')
             </if>
             <if test="memberPoints.phone != null and memberPoints.phone != ''">
-                u.phone LIKE CONCAT('%', #{memberPoints.phone}, '%')
+                and u.phone LIKE CONCAT('%', #{memberPoints.phone}, '%')
             </if>
             <if test="memberPoints.startTime != null">
-                mp.update_date &gt;= #{memberPoints.startTime}
+                and mp.update_date &gt;= #{memberPoints.startTime}
             </if>
             <if test="memberPoints.endTime != null">
-                mp.update_date &lt;= #{memberPoints.endTime}
+                and mp.update_date &lt;= #{memberPoints.endTime}
             </if>
         </where>
-        order by mp.points desc
+        order by mp.update_date desc
     </select>
 </mapper>

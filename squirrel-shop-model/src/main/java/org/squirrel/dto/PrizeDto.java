@@ -33,7 +33,7 @@ public class PrizeDto {
     private Integer prizeNum;
 
     @Schema(description = "修改时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateDate;
 
     @Schema(description = "奖品消耗的积分")

@@ -112,6 +112,24 @@ export const asyncRoutes = [
   /* nestedRouter,
   tableRouter,*/
   {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/list',
+    name: 'User',
+    meta: {
+      title: '用户管理',
+      icon: 'user'
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/user/list'),
+        name: 'UserList',
+        meta: { title: '用户管理', icon: 'user' }
+      }
+    ]
+  },
+  {
     path: '/member-point',
     component: Layout,
     redirect: '/member-point/list',
@@ -121,12 +139,6 @@ export const asyncRoutes = [
       icon: 'shopping'
     },
     children: [
-      {
-        path: 'config',
-        component: () => import('@/views/member-point/config'),
-        name: 'MemberPointsList',
-        meta: { title: '积分配置', icon: 'skill' }
-      },
       {
         path: 'list',
         component: () => import('@/views/member-point/list'),
@@ -145,28 +157,15 @@ export const asyncRoutes = [
         name: 'supplementDetail',
         meta: { title: '购物补充明细', icon: 'eye-open' },
         hidden: true
-      }
-    ]
-  },
-  {
-    path: '/user',
-    component: Layout,
-    redirect: '/user/list',
-    name: 'User',
-    meta: {
-      title: '用户管理',
-      icon: 'user'
-    },
-    children: [
+      },
       {
-        path: 'list',
-        component: () => import('@/views/user/list'),
-        name: 'UserList',
-        meta: { title: '用户管理', icon: 'user' }
+        path: 'config',
+        component: () => import('@/views/member-point/config'),
+        name: 'MemberPointsList',
+        meta: { title: '积分配置', icon: 'skill' }
       }
     ]
   },
-
   {
     path: '/prize',
     component: Layout,

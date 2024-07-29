@@ -26,7 +26,7 @@ public class MemberPointsListDto{
 
     private Integer points;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateDate;
 
 

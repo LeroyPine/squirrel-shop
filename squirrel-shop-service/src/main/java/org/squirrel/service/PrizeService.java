@@ -63,6 +63,7 @@ public class PrizeService {
         QueryWrapper<Prize> queryWrapper = new QueryWrapper<>();
         queryWrapper.like(StringUtils.isNotBlank(prizeParamDto.getPrizeName()), "prize_name", prizeParamDto.getPrizeName());
         queryWrapper.eq(StringUtils.isNotBlank(prizeParamDto.getPrizeId()), "prize_id", prizeParamDto.getPrizeId());
+        queryWrapper.orderByDesc("update_date");
         Page<Prize> prizePageInfo = prizeMapper.selectPage(prizePage, queryWrapper);
         long total = prizePageInfo.getTotal();
         if (total == 0) {

@@ -17,6 +17,7 @@ public enum ErrorCode {
     INSUFFICIENT_PERMISSIONS(1006, "权限不够"),
     POINT_NOT_ENOUGH(1007, "用户所剩积分不足以兑换该奖品!"),
     BUY_DETAIL_DUP(1008, "消费明细不能存在提交多个重复的商品,可进行单个商品数量的变更!"),
+    USER_DUP(1009, "用户已经存在,请保持姓名和电话唯一!"),
 
     ;
     private final int code;

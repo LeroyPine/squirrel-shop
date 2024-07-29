@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.squirrel.dto.ProductDto;
 import org.squirrel.dto.ProductParamDto;
 import org.squirrel.dto.SquirrelPageDto;
 import org.squirrel.po.Product;
@@ -40,7 +41,7 @@ public class ProductController {
 
     @Operation(summary = "修改商品", description = "修改商品")
     @PostMapping("/updateProduct")
-    public void updateProduct(@RequestBody Product product) {
+    public void updateProduct(@RequestBody ProductDto product) {
         productService.updateProduct(product);
     }
 
