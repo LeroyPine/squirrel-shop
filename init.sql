@@ -10,3 +10,5 @@ VALUES (1, 1, 'admin', '2024-06-23 17:25:46', '2024-06-23 17:25:47');
 
 INSERT INTO squirrel_shop.role_info (id, role_id, role_name, role_status, create_date, update_date) VALUES (1, 'admin', '管理员', 1, '2024-06-23 17:13:15', '2024-06-23 17:13:19');
 INSERT INTO squirrel_shop.role_info (id, role_id, role_name, role_status, create_date, update_date) VALUES (2, 'normal', '普通用户', 1, '2024-06-23 17:13:45', '2024-06-23 17:13:47');
+
+INSERT INTO squirrel_shop.member_points_config (id, config_name, config_rule, config_type, status, create_date, update_date) VALUES (1, '购买商品积分规则', '{"money":10}', 1, 1, '2024-07-25 21:16:10', '2024-07-25 21:16:13');
