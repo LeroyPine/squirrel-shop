@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.squirrel.config.WebConfig;
 import org.squirrel.constant.Constants;
 import org.squirrel.dto.FileDto;
 import org.squirrel.exception.BizException;
@@ -39,8 +40,7 @@ public class FileController {
             throw new IllegalArgumentException("上床文件不能为空!");
         }
         // 上传文件的存储目录
-        String uploadDir = "/Users/luobaosong/file/squirrel-shop";
-        String filePath = uploadDir + "/" + file.getOriginalFilename();
+        String filePath = WebConfig.uploadDir + "/" + file.getOriginalFilename();
         try {
             File dest = new File(filePath);
             file.transferTo(dest);
