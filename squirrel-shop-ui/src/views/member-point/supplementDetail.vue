@@ -39,17 +39,24 @@
       </div>
 
       <el-table :data="supplementForm.productDetailDtoList" style="width: 100%; margin-top: 20px;">
-        <el-table-column prop="productId" label="商品ID" />
         <el-table-column prop="productName" label="商品名称" />
-        <el-table-column prop="productNum" label="商品数量" />
+        <el-table-column label="商品数量">
+          <template slot-scope="scope">
+            <el-input-number v-model="scope.row.productNum" :min="1" @change="updateTotalAmount" />
+          </template>
+        </el-table-column>
         <el-table-column prop="productMoney" label="商品单价" />
-        <el-table-column prop="totalMoney" label="总金额" :formatter="row => row.productNum * row.productMoney" />
+        <el-table-column prop="totalMoney" label="总金额" :formatter="row => (row.productNum * row.productMoney).toFixed(2)" />
         <el-table-column label="操作">
           <template v-slot="scope">
             <el-button size="mini" type="danger" @click="removeProduct(scope.$index)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
+
+      <div class="total-amount">
+        总计金额: {{ totalAmount }}
+      </div>
 
       <el-form-item>
         <el-button type="primary" @click="submitSupplementDetail">提交补充明细</el-button>
@@ -117,6 +124,13 @@ export default {
       productSearchQuery: ''
     }
   },
+  computed: {
+    totalAmount() {
+      return this.supplementForm.productDetailDtoList.reduce((sum, product) => {
+        return sum + product.productNum * product.productMoney
+      }, 0).toFixed(2)
+    }
+  },
   created() {
     // 初始化时获取商品列表
     this.getProductList()
@@ -161,6 +175,7 @@ export default {
         }
       })
       this.productDialogVisible = false
+      this.updateTotalAmount()
     },
     addManualProduct() {
       if (!this.manualProduct.productName) {
@@ -175,7 +190,9 @@ export default {
         this.$message.error('商品单价不能为空且必须大于 0')
         return
       }
-      const existingProduct = this.supplementForm.productDetailDtoList.find(p => p.productId === this.manualProduct.productId)
+      // 生成临时的虚拟ID
+      this.manualProduct.productId = 'manual_' + Date.now()
+      const existingProduct = this.supplementForm.productDetailDtoList.find(p => p.productName === this.manualProduct.productName)
       if (existingProduct) {
         existingProduct.productNum += this.manualProduct.productNum
       } else {
@@ -189,6 +206,7 @@ export default {
         productNum: 1,
         productMoney: null
       }
+      this.updateTotalAmount()
     },
     clearManualInput() {
       this.manualProduct = {
@@ -200,16 +218,19 @@ export default {
     },
     clearSelectedProducts() {
       this.supplementForm.productDetailDtoList = []
+      this.updateTotalAmount()
     },
     removeProduct(index) {
       this.supplementForm.productDetailDtoList.splice(index, 1)
+      this.updateTotalAmount()
+    },
+    updateTotalAmount() {
+      this.$forceUpdate()
     },
     submitSupplementDetail() {
-      const totalAmount = this.supplementForm.productDetailDtoList.reduce((sum, product) => {
-        return sum + product.productNum * product.productMoney
-      }, 0)
+      const totalAmount = parseFloat(this.totalAmount).toFixed(2)
 
-      if (totalAmount !== parseFloat(this.supplementForm.amount)) {
+      if (totalAmount !== parseFloat(this.supplementForm.amount).toFixed(2)) {
         this.$message.error('录入的商品金额与记录的交易金额不一致，无法提交')
         return
       }
@@ -226,5 +247,11 @@ export default {
 <style scoped>
 .app-container {
   padding: 20px;
+}
+
+.total-amount {
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: right;
 }
 </style>

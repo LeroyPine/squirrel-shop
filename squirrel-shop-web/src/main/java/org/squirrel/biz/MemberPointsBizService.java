@@ -198,13 +198,17 @@ public class MemberPointsBizService {
             throw new IllegalArgumentException("录入的明细金额与客户此次购物消费金额不同,请修改!");
         }
 
+        // 如果非选择商品录入情况下,直接将该批商品保存至商品库
+        Integer buyDetailType = buyProductDetailDto.getBuyDetailType();
+        BuyDetailTypeEnum detailTypeEnum = BuyDetailTypeEnum.getType(buyDetailType);
+
         // 记录消费明细
         try {
             productDetailDtoList.forEach(productDetailDto -> {
                 MemberPointsHistoryDetail memberPointsHistoryDetail = MemberPointsHistoryDetail.builder()
                         .historyId(buyProductDetailDto.getHistoryId())
                         .productName(productDetailDto.getProductName())
-                        .productId(productDetailDto.getProductId())
+                        .productId(BuyDetailTypeEnum.CHOOSE_PRODUCT.equals(detailTypeEnum) ? productDetailDto.getProductId() : null)
                         .productMoney(productDetailDto.getProductMoney())
                         .productNum(productDetailDto.getProductNum())
                         .build();
@@ -214,9 +218,7 @@ public class MemberPointsBizService {
             throw new BizException(ErrorCode.BUY_DETAIL_DUP);
         }
 
-        // 如果非选择商品录入情况下,直接将该批商品保存至商品库
-        Integer buyDetailType = buyProductDetailDto.getBuyDetailType();
-        BuyDetailTypeEnum detailTypeEnum = BuyDetailTypeEnum.getType(buyDetailType);
+
         if (BuyDetailTypeEnum.CHOOSE_PRODUCT.equals(detailTypeEnum)) {
             return;
         }
