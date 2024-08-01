@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -38,7 +39,7 @@ public class MemberPoints {
      * 积分
      */
     @TableField(value = "points")
-    private Integer points;
+    private BigDecimal points;
 
     /**
      * 创建时间

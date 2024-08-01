@@ -20,6 +20,7 @@ import util.DateUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -66,15 +67,15 @@ public class MemberPointsBizService {
         if (Objects.isNull(userInfoDto) || Objects.isNull(userInfoDto.getPoints())) {
             throw new IllegalArgumentException("当前用户积分为空!");
         }
-        Integer points = userInfoDto.getPoints();
+        BigDecimal points = userInfoDto.getPoints();
 
         // 获取兑换奖品所需积分
         PrizeDto prizeDto = prizeService.findByPrizeId(prizeId);
         if (Objects.isNull(prizeDto)) {
             throw new IllegalArgumentException("奖品信息为空!");
         }
-        int consumePoints = prizeDto.getPoints() * prizeNum;
-        if (consumePoints > points) {
+        BigDecimal consumePoints = BigDecimal.valueOf(prizeDto.getPoints()).multiply(BigDecimal.valueOf(prizeNum));
+        if (consumePoints.compareTo(points) > 0) {
             throw new BizException(ErrorCode.POINT_NOT_ENOUGH);
         }
         // 兑换奖品
@@ -82,7 +83,7 @@ public class MemberPointsBizService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void doRedeemPrizes(UserInfoDto userInfoDto, PrizeDto prizeDto, RedeemPrizeDto redeemPrizeDto, int consumePoints) {
+    public void doRedeemPrizes(UserInfoDto userInfoDto, PrizeDto prizeDto, RedeemPrizeDto redeemPrizeDto, BigDecimal consumePoints) {
         // 减少产品数量
         int prizeUpdateRow = prizeService.reducePrizeNum(prizeDto.getPrizeId(), redeemPrizeDto.getPrizeNum());
         if (prizeUpdateRow <= 0) {
@@ -96,8 +97,8 @@ public class MemberPointsBizService {
         }
 
         String userName = userInfoDto.getUserName();
-        Integer beforePoints = userInfoDto.getPoints();
-        int afterPoints = userInfoDto.getPoints() - consumePoints;
+        BigDecimal beforePoints = userInfoDto.getPoints();
+        BigDecimal afterPoints = userInfoDto.getPoints().subtract(consumePoints);
 
         // 记录积分变更历史
         String changeDesc = String.format("用户%s,兑换奖品:%s,数量:%s,共消耗%s积分,剩余积分为:%s,时间:%s",
@@ -119,7 +120,7 @@ public class MemberPointsBizService {
                 .historyId(pointsHistoryId)
                 .productName(prizeDto.getPrizeName())
                 .productId(prizeDto.getPrizeId())
-                .productPoints(prizeDto.getPoints())
+                .productPoints(BigDecimal.valueOf(prizeDto.getPoints()))
                 .productNum(redeemPrizeDto.getPrizeNum())
                 .build();
         memberPointsHistoryDetailService.saveMemberPointsHistoryDetail(memberPointsHistoryDetail);
@@ -143,7 +144,7 @@ public class MemberPointsBizService {
         if (price == null || money == null || money.compareTo(BigDecimal.ZERO) == 0) {
             throw new IllegalArgumentException("金额积分不合法!");
         }
-        Integer points = price.divideToIntegralValue(money).intValue();
+        BigDecimal points = price.divide(money,2, RoundingMode.HALF_UP);
         UserInfoDto userInfoDto = userInfoService.findUserInfoByUserId(userId);
         if (Objects.isNull(userInfoDto) || Objects.isNull(userInfoDto.getPoints())) {
             throw new IllegalArgumentException("当前用户积分为空!");
@@ -152,10 +153,10 @@ public class MemberPointsBizService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void doBuyProduct(UserInfoDto userInfoDto, BuyProductDto buyProductDto, Integer points) {
+    public void doBuyProduct(UserInfoDto userInfoDto, BuyProductDto buyProductDto, BigDecimal points) {
 
-        Integer beforePoint = userInfoDto.getPoints();
-        Integer afterPoint = beforePoint + points;
+        BigDecimal beforePoint = userInfoDto.getPoints();
+        BigDecimal afterPoint = beforePoint.add(points);
         String userName = userInfoDto.getUserName();
 
         // 修改会员积分

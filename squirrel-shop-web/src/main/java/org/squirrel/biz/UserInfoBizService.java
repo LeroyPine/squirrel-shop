@@ -17,6 +17,7 @@ import org.squirrel.service.MemberPointsService;
 import org.squirrel.service.UserInfoService;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +61,7 @@ public class UserInfoBizService {
         MemberPointsHistory pointsHistory = MemberPointsHistory.builder()
                 .changeType(MemberChangeTypeEnum.UPDATE_BASE_INFO.getCode())
                 .userId(userId)
-                .beforePoints(0)
+                .beforePoints(BigDecimal.ZERO)
                 .afterPoints(userInfoDto.getPoints())
                 .changeDesc("管理员初始化用户信息,积分更新为:" + userInfoDto.getPoints())
                 .build();
@@ -86,8 +87,8 @@ public class UserInfoBizService {
         }
 
         // 如果积分相同则不进行更新
-        Integer points = memberPoints.getPoints();
-        if (Objects.equals(points, userInfoDto.getPoints())) {
+        BigDecimal points = memberPoints.getPoints();
+        if (points.compareTo(userInfoDto.getPoints()) == 0) {
             return;
         }
         MemberPoints updateMemberPoints = MemberPoints.builder()
@@ -118,7 +119,7 @@ public class UserInfoBizService {
         }
         List<Integer> userIdList = records.stream().map(UserInfo::getUserId).collect(Collectors.toList());
         List<MemberPoints> memberPoints = memberPointsService.selectMemberPoints(userIdList);
-        Map<Integer, Integer> userIdPointsMap = memberPoints.stream().collect(Collectors.toMap(MemberPoints::getUserId, MemberPoints::getPoints));
+        Map<Integer, BigDecimal> userIdPointsMap = memberPoints.stream().collect(Collectors.toMap(MemberPoints::getUserId, MemberPoints::getPoints));
         List<UserInfoDto> userInfoDtoList = Lists.newArrayList();
         records.forEach(s -> {
             UserInfoDto userInfoDto = new UserInfoDto();

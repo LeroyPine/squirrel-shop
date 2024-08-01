@@ -45,13 +45,13 @@ public class MemberPointsHistory {
      * 变更前积分
      */
     @TableField(value = "before_points")
-    private Integer beforePoints;
+    private BigDecimal beforePoints;
 
     /**
      * 变更后积分
      */
     @TableField(value = "after_points")
-    private Integer afterPoints;
+    private BigDecimal afterPoints;
 
     /**
      * 变更描述
@@ -70,7 +70,7 @@ public class MemberPointsHistory {
      * 兑换积分
      */
     @TableField(value = "redeemed_points")
-    private Integer redeemedPoints;
+    private BigDecimal redeemedPoints;
 
     /**
      * 备注

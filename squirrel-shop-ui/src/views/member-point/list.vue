@@ -73,9 +73,7 @@
         <el-form-item label="预计增加积分">
           <el-input v-model="estimatedPoints" disabled />
         </el-form-item>
-        <el-form-item class="price-tip">
-          <span>满10元兑换1积分哦,不足不计分!</span>
-        </el-form-item>
+        <!-- 移除不需要的提示 -->
         <el-form-item label="备注">
           <el-input v-model="shoppingForm.remark" type="textarea" />
         </el-form-item>
@@ -225,76 +223,19 @@ export default {
       this.handleFilter()
     },
     handleShopping(user) {
-      this.currentUser = { ...user }
+      this.currentUser = user
       this.shoppingForm.userId = user.userId
-      this.shoppingForm.amount = null
-      this.shoppingForm.remark = ''
-      this.estimatedPoints = 0
       this.shoppingDialogVisible = true
-    },
-    validateAmount(rule, value, callback) {
-      if (value <= 0) {
-        callback(new Error('消费金额必须大于0'))
-      } else {
-        callback()
-      }
-    },
-    updateEstimatedPoints() {
-      if (this.shoppingForm.amount > 0) {
-        this.estimatedPoints = Math.floor(this.shoppingForm.amount / 10)
-      } else {
-        this.estimatedPoints = 0
-      }
-    },
-    submitShopping() {
-      this.$refs.shoppingForm.validate(valid => {
-        if (valid) {
-          // 提交购物数据
-          console.log('提交购物数据', this.shoppingForm)
-          buyProduct(this.shoppingForm).then(res => {
-            this.$message.success('恭喜您,消费完成!')
-            this.getList()
-            this.shoppingDialogVisible = false
-          })
-        }
-      })
+      this.estimatedPoints = 0
     },
     handleExchange(user) {
-      this.currentUser = { ...user }
+      this.currentUser = user
       this.exchangeForm.userId = user.userId
-      this.exchangeForm.prizeId = null
-      this.exchangeForm.prizeNum = 1
-      this.exchangeForm.remark = ''
-      this.requiredPoints = 0
-      this.fetchPrizeList()
       this.exchangeDrawerVisible = true
+      this.requiredPoints = 0
+      this.loadPrizes()
     },
-    handlePrizeChange() {
-      this.updateRequiredPoints()
-    },
-    updateRequiredPoints() {
-      const selectedPrize = this.prizes.find(prize => prize.prizeId === this.exchangeForm.prizeId)
-      if (selectedPrize && this.exchangeForm.prizeNum > 0) {
-        this.requiredPoints = selectedPrize.points * this.exchangeForm.prizeNum
-      } else {
-        this.requiredPoints = 0
-      }
-      if (this.requiredPoints > this.currentUser.points) {
-        this.$message.error('所需积分超过用户剩余积分')
-        this.requiredPoints = 0 // 重置所需积分以防止提交时出错
-      }
-    },
-    validateQuantity(rule, value, callback) {
-      const selectedPrize = this.prizes.find(prize => prize.prizeId === this.exchangeForm.prizeId)
-      if (value <= 0) {
-        callback(new Error('数量必须大于0'))
-      } else if (selectedPrize && value > selectedPrize.prizeNum) {
-        callback(new Error('兑换数量不能高于剩余数量,请补充库存!'))
-      } else {
-        callback()
-      }
-    },
-    fetchPrizeList() {
+    loadPrizes() {
       this.loadingPrizes = true
       fetchPrizeList(this.prizeQuery).then(response => {
         this.prizes = response.data.records
@@ -302,65 +243,111 @@ export default {
         this.loadingPrizes = false
       })
     },
-    submitExchange() {
-      this.$refs.exchangeForm.validate(valid => {
-        if (valid) {
-          if (this.requiredPoints > this.currentUser.points) {
-            this.$message.error('剩余积分不足')
-          } else {
-          // 提交积分兑换数据
-            redeemPrizes(this.exchangeForm).then(response => {
-              this.$message.success('恭喜您,兑换成功!')
-              this.getList()
-              this.exchangeDrawerVisible = false
-            })
-          }
-        }
-      })
-    },
     handlePrizePageChange(page) {
       this.prizeQuery.page = page
-      this.fetchPrizeList()
+      this.loadPrizes()
     },
     handlePrizeSearch(query) {
       this.prizeQuery.prizeName = query
       this.prizeQuery.page = 1
-      this.fetchPrizeList()
+      this.loadPrizes()
+    },
+    handlePrizeChange(value) {
+      this.selectedPrizeId = value
+    },
+    updateEstimatedPoints() {
+      if (this.shoppingForm.amount > 0) {
+        const amount = parseFloat(this.shoppingForm.amount)
+        this.estimatedPoints = (amount / 10).toFixed(1)
+      } else {
+        this.estimatedPoints = 0
+      }
+    },
+    validateAmount(rule, value, callback) {
+      if (!value) {
+        return callback(new Error('请输入消费金额'))
+      } else if (value <= 0) {
+        return callback(new Error('消费金额必须大于0'))
+      } else {
+        callback()
+      }
+    },
+    validateQuantity(rule, value, callback) {
+      const prizeNum = parseFloat(value)
+      if (isNaN(prizeNum) || prizeNum <= 0) {
+        callback(new Error('数量必须大于0且为有效数字'))
+      } else {
+        callback()
+      }
+    },
+    updateRequiredPoints() {
+      const prize = this.prizes.find(prize => prize.prizeId === this.exchangeForm.prizeId)
+      if (prize) {
+        const prizeNum = this.exchangeForm.prizeNum
+        if (!isNaN(prizeNum) && prizeNum > 0) {
+          this.requiredPoints = (prize.points * prizeNum).toFixed(1)
+        } else {
+          this.requiredPoints = 0
+        }
+      }
+    },
+    submitShopping() {
+      this.$refs.shoppingForm.validate((valid) => {
+        if (valid) {
+          const formData = {
+            ...this.shoppingForm,
+            points: parseFloat(this.estimatedPoints)
+          }
+          buyProduct(formData).then(() => {
+            this.shoppingDialogVisible = false
+            this.getList()
+          })
+        }
+      })
+    },
+    submitExchange() {
+      this.$refs.exchangeForm.validate((valid) => {
+        if (valid) {
+          const requiredPoints = parseFloat(this.requiredPoints)
+          if (!isNaN(requiredPoints) && requiredPoints > 0) {
+            const formData = {
+              ...this.exchangeForm,
+              points: requiredPoints
+            }
+            redeemPrizes(formData).then(() => {
+              this.exchangeDrawerVisible = false
+              this.getList()
+            })
+          } else {
+            this.$message.error('消耗积分计算有误，请检查兑换数量。')
+          }
+        }
+      })
     }
   }
 }
 </script>
 
 <style scoped>
-.app-container {
-  padding: 20px;
-}
 .custom-option {
   display: flex;
   align-items: center;
-  padding: 5px 0;
 }
 .prize-image {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   margin-right: 10px;
 }
 .option-content {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 .prize-name {
+  font-size: 16px;
   font-weight: bold;
 }
 .prize-quantity {
+  font-size: 12px;
   color: #666;
 }
-.price-tip {
-  text-align: left;
-  margin-bottom: 20px;
-  font-size: 14px;
-  color: #C03F08FF;
-}
 </style>
-

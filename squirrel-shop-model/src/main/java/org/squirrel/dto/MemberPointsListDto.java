@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -24,7 +25,7 @@ public class MemberPointsListDto{
 
     private String phone;
 
-    private Integer points;
+    private BigDecimal points;
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateDate;

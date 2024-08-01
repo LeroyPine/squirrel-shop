@@ -27,13 +27,13 @@ public class MemberPointsHistoryListDto {
 
     private String userName;
 
-    private Integer beforePoints;
+    private BigDecimal beforePoints;
 
-    private Integer afterPoints;
+    private BigDecimal afterPoints;
 
     private BigDecimal amount;
 
-    private Integer redeemedPoints;
+    private BigDecimal redeemedPoints;
 
     private String changeDesc;
 

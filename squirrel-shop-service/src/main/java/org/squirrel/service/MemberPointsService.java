@@ -14,6 +14,7 @@ import org.squirrel.mapper.MemberPointsMapper;
 import org.squirrel.po.MemberPoints;
 import org.squirrel.po.Prize;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -52,7 +53,7 @@ public class MemberPointsService {
     }
 
     public void updateMemberPoints(MemberPoints memberPoints) {
-        if (memberPoints.getPoints() <= 0) {
+        if (memberPoints.getPoints().compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("会员积分不能小于0!");
         }
         UpdateWrapper<MemberPoints> memberPointsUpdateWrapper = new UpdateWrapper<>();
@@ -60,7 +61,7 @@ public class MemberPointsService {
         memberPointsMapper.update(memberPoints, memberPointsUpdateWrapper);
     }
 
-    public int reduceMemberPoints(Integer userId, int consumePoints) {
+    public int reduceMemberPoints(Integer userId, BigDecimal consumePoints) {
         return memberPointsMapper.reduceMemberPoints(userId, consumePoints);
     }
 

@@ -59,7 +59,7 @@ public class MemberPointsHistoryDetail {
      * 单个商品积分
      */
     @TableField(value = "product_points")
-    private Integer productPoints;
+    private BigDecimal productPoints;
 
     /**
      * 单个商品金额

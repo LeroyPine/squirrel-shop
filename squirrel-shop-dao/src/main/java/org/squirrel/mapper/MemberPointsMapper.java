@@ -9,6 +9,7 @@ import org.squirrel.dto.MemberPointsListDto;
 import org.squirrel.dto.MemberPointsListParamDto;
 import org.squirrel.po.MemberPoints;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ import java.util.List;
 public interface MemberPointsMapper extends BaseMapper<MemberPoints> {
 
     @Update("update member_points set points = points - #{consumePoints} where user_id = #{userId} and points - #{consumePoints} >=0")
-    int reduceMemberPoints(@Param("userId") Integer userId, @Param("consumePoints") int consumePoints);
+    int reduceMemberPoints(@Param("userId") Integer userId, @Param("consumePoints") BigDecimal consumePoints);
 
     List<MemberPoints> selectMemberPoints(@Param("list") List<Integer> userIds);
 
