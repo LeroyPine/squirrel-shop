@@ -16,7 +16,7 @@ create table member_points
     id          int auto_increment comment '主键'
         primary key,
     user_id     int                          not null comment '用户id',
-    points      int                          not null comment '积分',
+    points      double(10, 1)                not null comment '积分',
     create_date datetime                     not null comment '创建时间',
     update_date datetime default (curtime()) not null on update CURRENT_TIMESTAMP comment '修改时间'
 )
@@ -44,10 +44,10 @@ create table member_points_history
         primary key,
     user_id         int                          not null comment '用户ID',
     change_type     int                          not null comment '1:手动修改用户积分 2 :消费 3:兑奖 ',
-    before_points   int                          not null comment '变更前积分',
-    after_points    int                          not null comment '变更后积分',
+    before_points   double(10, 2)                not null comment '变更前积分',
+    after_points    double(10, 1)                not null comment '变更后积分',
     amount          double(10, 2)                null comment '消费金额',
-    redeemed_points int                          null comment '兑换积分',
+    redeemed_points double(10, 1)                null comment '兑换积分',
     remark          varchar(255)                 null comment '备注',
     change_desc     varchar(255)                 null comment '变更描述',
     create_date     datetime                     not null comment '创建时间',
@@ -66,7 +66,7 @@ create table member_points_history_detail
     product_id     varchar(64)                  null comment '商品ID',
     product_name   varchar(64)                  null comment '商品名称',
     product_num    int                          null comment '商品数量',
-    product_points int                          null comment '单个商品积分',
+    product_points double(10, 1)                null comment '单个商品积分',
     product_money  double(10, 2)                null comment '单个商品金额',
     create_date    datetime                     null comment '创建时间',
     update_date    datetime default (curtime()) not null on update CURRENT_TIMESTAMP comment '修改时间',
