@@ -46,7 +46,7 @@ cd squirrel-shop
 *   进入后端项目目录
 *   确保你已安装 Java 开发环境 (JDK)。
 *   配置数据库连接信息：
-    *   找到后端项目的配置文件 ( `src/main/resources/application.properties` 或 `application.yml`)。
+    *   找到后端项目的配置文件 (在squirrel-shop-starter文件夹下)。
     *   修改其中的 MySQL 数据库连接URL、用户名和密码。
     *   ```properties
         # application.properties 示例
@@ -78,21 +78,11 @@ cd squirrel-shop
     ```bash
     npm install
     ```
-*   配置后端API地址：
-    *   查找前端项目的环境变量配置文件（例如 `.env`, `.env.development`, `.env.production`）。
-    *   配置后端API的基础URL，例如：
-    *   ```env
-        # .env.development 示例
-        VUE_APP_BASE_API=/api # 如果使用了代理
-        # 或直接写后端地址
-        # VUE_APP_BASE_API=http://localhost:8080/api
-        ```
-    *   （具体配置方式取决于前端项目脚手架，如 Vue CLI）
 *   运行前端开发服务器：
     ```bash
     npm run dev
     ```
-    *   项目通常会在 `http://localhost:9527` 或其他端口启动。
+    *   项目启动后会显示 `http://localhost:9527`
 
 **4. 访问系统**
 
@@ -103,13 +93,9 @@ cd squirrel-shop
 
 欢迎提出问题和贡献代码！请提交 Pull Request 或 Issue。
 
-## License
-
-[请在此处说明项目的许可证类型，例如 MIT, Apache 2.0 等]
-
 ## 联系方式
 
-邮箱: paul_pine@163.com
+邮箱: paul_pine@163.com  
 WX: CherishedMoments_L
 
 ---
