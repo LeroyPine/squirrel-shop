@@ -1,4 +1,3 @@
-```markdown
 # squirrel-shop
 
 一个前后端分离的积分管理系统。
@@ -28,8 +27,8 @@
 
 （你可以在这里插入项目的关键截图，例如登录页、仪表盘、积分列表页等）
 
-*   登录页: [img.png](img.png)
-*   仪表盘: [img_1.png](img_1.png)
+*   登录页: ![img.png](img.png)
+*   仪表盘: ![img_1.png](img_1.png)
 *   积分列表:![img_2.png](img_2.png)
 *   积分明细: ![img_3.png](img_3.png)
 
