@@ -1,3 +1,8 @@
+##创建表结构
+create schema squirrel_shop;
+
+
+
 create table admin_user_info
 (
     id          int auto_increment comment '主键'
